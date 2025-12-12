@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "home": "Home",
+    "templates": "Templates",
+    "blog": "Blog",
+    "contact": "Contact"
+  },
+  "home": {
+    "badge": "Launch faster. Sell more.",
+    "title": "Launch Your Sales Website in Minutes",
+    "subtitle": "Choose a template, pay online, and get an instant store on your own subdomain or custom domain. No engineering team, no long setup calls, just a ready-to-sell experience.",
+    "primaryCta": "View Templates",
+    "secondaryCta": "Book a Demo",
+    "featuresTitle": "Everything you need to start selling",
+    "featuresSubtitle": "From deployment to domains, Sale Template gives you a production-ready stack so you can focus on your offer and customers.",
+    "features": {
+      "automaticDeployment": {
+        "title": "Automatic deployment",
+        "description": "Push once and we handle build, deploy, and global CDN delivery for you."
+      },
+      "salesTemplates": {
+        "title": "Ready-made sales templates",
+        "description": "Choose from conversion-optimized layouts for SaaS, apps, and digital products."
+      },
+      "affiliate": {
+        "title": "Affiliate ecosystem",
+        "description": "Invite partners, track referrals, and grow revenue with built-in affiliate tools."
+      },
+      "customDomain": {
+        "title": "Custom domain support",
+        "description": "Connect your own domain in a few clicks with free SSL and best-practice DNS."
+      }
+    },
+    "templatesTitle": "Preview popular templates",
+    "templatesSubtitle": "Pick a starting point and customize copy, colors, and sections without touching a backend.",
+    "templatesViewAll": "View all templates",
+    "templates": {
+      "saasLaunch": {
+        "name": "SaaS Launch",
+        "description": "Clean and focused layout for B2B SaaS products and startups."
+      },
+      "creatorStudio": {
+        "name": "Creator Studio",
+        "description": "Perfect for creators selling courses, memberships, or digital downloads."
+      },
+      "mobileApp": {
+        "name": "Mobile App Landing",
+        "description": "Showcase your iOS and Android apps with clear benefit-driven sections."
+      },
+      "agency": {
+        "name": "Agency Sales Page",
+        "description": "Build trust with testimonials, case studies, and service highlights."
+      }
+    },
+    "pricingTitle": "Simple pricing that scales with you",
+    "pricingSubtitle": "Start with a single template and upgrade as you launch more offers, brands, or campaigns."
+  }
+}

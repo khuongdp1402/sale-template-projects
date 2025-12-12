@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "templates": "Mẫu giao diện",
+    "blog": "Blog",
+    "contact": "Liên hệ"
+  },
+  "home": {
+    "badge": "Ra mắt nhanh hơn. Bán được nhiều hơn.",
+    "title": "Khởi chạy website bán hàng trong vài phút",
+    "subtitle": "Chọn một mẫu, thanh toán online và nhận ngay cửa hàng trên subdomain hoặc tên miền riêng của bạn. Không cần đội ngũ kỹ thuật, không cần triển khai phức tạp.",
+    "primaryCta": "Xem mẫu giao diện",
+    "secondaryCta": "Đặt lịch demo",
+    "featuresTitle": "Tất cả những gì bạn cần để bắt đầu bán hàng",
+    "featuresSubtitle": "Từ triển khai đến tên miền, Sale Template cung cấp cho bạn một nền tảng sẵn sàng cho sản xuất để bạn tập trung vào sản phẩm và khách hàng.",
+    "features": {
+      "automaticDeployment": {
+        "title": "Triển khai tự động",
+        "description": "Bạn chỉ cần đẩy một lần, chúng tôi lo build, deploy và CDN toàn cầu."
+      },
+      "salesTemplates": {
+        "title": "Mẫu trang bán hàng có sẵn",
+        "description": "Lựa chọn các layout tối ưu chuyển đổi cho SaaS, app và sản phẩm số."
+      },
+      "affiliate": {
+        "title": "Hệ sinh thái affiliate",
+        "description": "Mời cộng tác viên, theo dõi hoa hồng và tăng trưởng doanh thu dễ dàng."
+      },
+      "customDomain": {
+        "title": "Hỗ trợ tên miền riêng",
+        "description": "Kết nối tên miền riêng chỉ trong vài bước, kèm SSL miễn phí và cấu hình DNS chuẩn."
+      }
+    },
+    "templatesTitle": "Xem trước các mẫu phổ biến",
+    "templatesSubtitle": "Chọn điểm bắt đầu và tùy chỉnh nội dung, màu sắc, bố cục mà không cần backend.",
+    "templatesViewAll": "Xem tất cả mẫu",
+    "templates": {
+      "saasLaunch": {
+        "name": "SaaS Launch",
+        "description": "Layout gọn gàng cho sản phẩm SaaS B2B và startup."
+      },
+      "creatorStudio": {
+        "name": "Creator Studio",
+        "description": "Phù hợp cho creator bán khóa học, membership hoặc sản phẩm số."
+      },
+      "mobileApp": {
+        "name": "Mobile App Landing",
+        "description": "Giúp bạn giới thiệu app iOS/Android với các section tập trung vào lợi ích."
+      },
+      "agency": {
+        "name": "Agency Sales Page",
+        "description": "Tăng độ tin cậy với testimonial, case study và phần giới thiệu dịch vụ."
+      }
+    },
+    "pricingTitle": "Bảng giá đơn giản, mở rộng theo nhu cầu",
+    "pricingSubtitle": "Bắt đầu với một mẫu duy nhất và nâng cấp khi bạn ra mắt thêm sản phẩm, thương hiệu hoặc chiến dịch."
+  }
+}
