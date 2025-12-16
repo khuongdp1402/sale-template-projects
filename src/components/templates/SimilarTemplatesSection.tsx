@@ -27,3 +27,5 @@ const SimilarTemplatesSection: React.FC<Props> = ({ templates }) => {
 
 export default SimilarTemplatesSection;
 
+
+

@@ -64,3 +64,5 @@ const CardCarousel: React.FC<Props> = ({ items, autoPlay = true, interval = 4000
 
 export default CardCarousel;
 
+
+

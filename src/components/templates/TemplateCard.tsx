@@ -94,3 +94,5 @@ const TemplateCard: React.FC<Props> = ({ template, variant = 'default' }) => {
 
 export default TemplateCard;
 
+
+

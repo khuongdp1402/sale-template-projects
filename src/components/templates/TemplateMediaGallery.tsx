@@ -53,3 +53,5 @@ const TemplateMediaGallery: React.FC<Props> = ({ template }) => {
 
 export default TemplateMediaGallery;
 
+
+

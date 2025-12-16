@@ -109,3 +109,5 @@ const TemplateInfoPanel: React.FC<Props> = ({ template, onScrollToSupport }) => 
 
 export default TemplateInfoPanel;
 
+
+
