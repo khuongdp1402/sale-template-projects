@@ -41,7 +41,8 @@ export const RegisterPage: React.FC = () => {
 
         if (result.success) {
             showToast('Đăng ký thành công! Chào mừng bạn đến với K-WingX', 'success');
-            navigate('/dashboard', { replace: true });
+            // Không redirect, vẫn ở trang portal
+            navigate(-1);
         } else if (result.errors) {
             const errorMap: Record<string, string> = {};
             result.errors.forEach((err: AuthError) => {

@@ -14,6 +14,8 @@ import { DashboardHome } from '../pages/dashboard/DashboardHome';
 import { PurchasesPage } from '../pages/dashboard/PurchasesPage';
 import { ApiAccessPage } from '../pages/dashboard/ApiAccessPage';
 import { AccountSettingsPage } from '../pages/dashboard/AccountSettingsPage';
+import { AdminPage } from '../pages/admin/AdminPage';
+import { UsersPage } from '../pages/admin/UsersPage';
 import { RequireAuth } from '../components/auth/RequireAuth';
 
 const router = createBrowserRouter([
@@ -56,7 +58,11 @@ const router = createBrowserRouter([
     element: <RegisterPage />,
   },
   {
-    path: '/dashboard',
+    path: '/admin',
+    element: <AdminPage />,
+  },
+  {
+    path: '/admin/dashboard',
     element: (
       <RequireAuth>
         <DashboardLayout />
@@ -67,16 +73,60 @@ const router = createBrowserRouter([
         index: true,
         element: <DashboardHome />,
       },
+    ],
+  },
+  {
+    path: '/admin/users',
+    element: (
+      <RequireAuth>
+        <DashboardLayout />
+      </RequireAuth>
+    ),
+    children: [
       {
-        path: 'purchases',
+        index: true,
+        element: <UsersPage />,
+      },
+    ],
+  },
+  {
+    path: '/admin/purchases',
+    element: (
+      <RequireAuth>
+        <DashboardLayout />
+      </RequireAuth>
+    ),
+    children: [
+      {
+        index: true,
         element: <PurchasesPage />,
       },
+    ],
+  },
+  {
+    path: '/admin/api',
+    element: (
+      <RequireAuth>
+        <DashboardLayout />
+      </RequireAuth>
+    ),
+    children: [
       {
-        path: 'api',
+        index: true,
         element: <ApiAccessPage />,
       },
+    ],
+  },
+  {
+    path: '/admin/account',
+    element: (
+      <RequireAuth>
+        <DashboardLayout />
+      </RequireAuth>
+    ),
+    children: [
       {
-        path: 'account',
+        index: true,
         element: <AccountSettingsPage />,
       },
     ],

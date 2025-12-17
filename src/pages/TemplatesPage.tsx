@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { FiFilter, FiSearch } from 'react-icons/fi';
+import React, { useMemo, useState, useEffect } from 'react';
+import { FiFilter, FiSearch, FiX } from 'react-icons/fi';
 import TemplateCard from '../components/templates/TemplateCard';
 import Modal from '../components/common/Modal';
 import { TemplateCategory, TemplateItem, getAllTemplates } from '../data/templates';
@@ -29,6 +29,7 @@ export const TemplatesPage: React.FC = () => {
   const [selectedCategories, setSelectedCategories] = useState<TemplateCategory[]>([]);
   const [audience, setAudience] = useState<AudienceFilter>('All');
   const [sort, setSort] = useState<SortKey>('popular');
+  const [isTitleCollapsed, setIsTitleCollapsed] = useState(false);
 
   const [isAdvancedOpen, setAdvancedOpen] = useState(false);
   const [priceMin, setPriceMin] = useState<number | undefined>();
@@ -39,6 +40,16 @@ export const TemplatesPage: React.FC = () => {
   const [filterDiscount, setFilterDiscount] = useState(false);
   const [typeFilters, setTypeFilters] = useState<TemplateItem['templateType'][]>([]);
   const [industryFilters, setIndustryFilters] = useState<TemplateCategory[]>([]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setIsTitleCollapsed(scrollY > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleCategory = (cat: TemplateCategory) => {
     setSelectedCategories((prev) => (prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]));
@@ -161,7 +172,13 @@ export const TemplatesPage: React.FC = () => {
 
   return (
     <section className="space-y-6">
-      <header className="space-y-2">
+      <header 
+        className={`space-y-2 transition-all duration-300 ${
+          isTitleCollapsed 
+            ? 'opacity-0 max-h-0 overflow-hidden mb-0' 
+            : 'opacity-100 max-h-40 mb-4'
+        }`}
+      >
         <h1 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">K-WingX Templates</h1>
         <p className="text-sm text-slate-600 dark:text-slate-300">
           Choose a template for MMO services, proxy, game account sales, or e-commerce.
@@ -176,8 +193,19 @@ export const TemplatesPage: React.FC = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Tìm theo tên, mô tả, ngành..."
-              className="w-full rounded-md border border-slate-200 bg-white px-10 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500"
+              className={`w-full rounded-md border border-slate-200 bg-white py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 ${
+                search ? 'px-10 pr-10' : 'px-10'
+              }`}
             />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-3 top-2.5 h-5 w-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                aria-label="Clear search"
+              >
+                <FiX className="h-5 w-5" />
+              </button>
+            )}
           </div>
           <div className="flex flex-wrap gap-2">
             <select

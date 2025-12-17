@@ -16,7 +16,7 @@ export const LoginPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const from = (location.state as any)?.from?.pathname || '/dashboard';
+    const from = (location.state as any)?.from?.pathname || '/admin/dashboard';
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -29,7 +29,8 @@ export const LoginPage: React.FC = () => {
 
         if (result.success) {
             showToast('Đăng nhập thành công!', 'success');
-            navigate(from, { replace: true });
+            // Không redirect, vẫn ở trang portal
+            navigate(-1);
         } else {
             setError(result.error?.message || 'Đăng nhập thất bại');
         }
@@ -45,7 +46,8 @@ export const LoginPage: React.FC = () => {
 
         if (result.success) {
             showToast('Đăng nhập với Google thành công!', 'success');
-            navigate(from, { replace: true });
+            // Không redirect, vẫn ở trang portal
+            navigate(-1);
         }
     };
 

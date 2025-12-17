@@ -1,12 +1,39 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
+import { FiLogOut, FiChevronDown } from 'react-icons/fi';
 
 interface DashboardHeaderProps {
     onMenuClick: () => void;
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onMenuClick }) => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        if (isDropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isDropdownOpen]);
+
+    const handleLogout = () => {
+        logout();
+        setIsDropdownOpen(false);
+        navigate('/');
+    };
 
     return (
         <header className="h-16 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-4 lg:px-8">
@@ -30,19 +57,38 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onMenuClick })
                     <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
                 </button>
 
-                {/* User Profile */}
-                <div className="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-slate-700">
-                    <div className="text-right hidden sm:block">
-                        <p className="text-sm font-medium text-slate-900 dark:text-white">
-                            {user?.username || 'User'}
-                        </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
-                            {user?.email || 'user@example.com'}
-                        </p>
-                    </div>
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold text-lg">
-                        {user?.username?.[0]?.toUpperCase() || 'U'}
-                    </div>
+                {/* User Profile with Dropdown */}
+                <div className="relative pl-4 border-l border-slate-200 dark:border-slate-700" ref={dropdownRef}>
+                    <button
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                    >
+                        <div className="text-right hidden sm:block">
+                            <p className="text-sm font-medium text-slate-900 dark:text-white">
+                                {user?.username || 'User'}
+                            </p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                                {user?.email || 'user@example.com'}
+                            </p>
+                        </div>
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold text-lg">
+                            {user?.username?.[0]?.toUpperCase() || 'U'}
+                        </div>
+                        <FiChevronDown className={`h-4 w-4 text-slate-600 dark:text-slate-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {isDropdownOpen && (
+                        <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 z-50">
+                            <div className="py-1">
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2"
+                                >
+                                    <FiLogOut className="h-4 w-4" />
+                                    Đăng xuất
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </header>

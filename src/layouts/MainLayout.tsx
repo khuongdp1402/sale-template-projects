@@ -7,7 +7,7 @@ export const MainLayout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950">
       <Header />
-      <main className="flex-1 main-container py-10">
+      <main className="flex-1 main-container py-10 pt-24">
         <Outlet />
       </main>
       <Footer />
