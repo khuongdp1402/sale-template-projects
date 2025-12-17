@@ -1,0 +1,16 @@
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/bin/Debug/net8.0/KWingX.Application.deps.json
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/bin/Debug/net8.0/KWingX.Application.dll
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/bin/Debug/net8.0/KWingX.Application.pdb
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/bin/Debug/net8.0/KWingX.Domain.dll
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/bin/Debug/net8.0/KWingX.Domain.pdb
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/obj/Debug/net8.0/KWingX.Application.csproj.AssemblyReference.cache
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/obj/Debug/net8.0/KWingX.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/obj/Debug/net8.0/KWingX.Application.AssemblyInfoInputs.cache
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/obj/Debug/net8.0/KWingX.Application.AssemblyInfo.cs
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/obj/Debug/net8.0/KWingX.Application.csproj.CoreCompileInputs.cache
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/obj/Debug/net8.0/KWingX.Application.sourcelink.json
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/obj/Debug/net8.0/KWingX.A.B3A98329.Up2Date
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/obj/Debug/net8.0/KWingX.Application.dll
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/obj/Debug/net8.0/refint/KWingX.Application.dll
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/obj/Debug/net8.0/KWingX.Application.pdb
+/Users/khuongdp/Projects/sale-template-projects/KWingX.Backend/src/KWingX.Application/obj/Debug/net8.0/ref/KWingX.Application.dll

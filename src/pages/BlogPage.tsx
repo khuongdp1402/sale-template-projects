@@ -13,8 +13,9 @@ import { FeaturedPostCard } from '../components/blog/FeaturedPostCard';
 import { CategoryChips } from '../components/blog/CategoryChips';
 import { BlogSearchSortBar } from '../components/blog/BlogSearchSortBar';
 import { GuidesHighlightSection } from '../components/blog/GuidesHighlightSection';
+import { TrendingList } from '../components/blog/TrendingList';
 
-const POSTS_PER_PAGE = 6;
+const POSTS_PER_PAGE = 9;
 
 export const BlogPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -71,7 +72,7 @@ export const BlogPage: React.FC = () => {
       </section>
 
       <div className="container mx-auto px-4 py-12">
-        {/* Featured Post */}
+        {/* Featured Post + Trending */}
         {featuredPost && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -79,7 +80,17 @@ export const BlogPage: React.FC = () => {
             transition={{ delay: 0.1 }}
             className="mb-16"
           >
-            <FeaturedPostCard post={featuredPost} />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Featured Post - 2/3 width */}
+              <div className="lg:col-span-2">
+                <FeaturedPostCard post={featuredPost} />
+              </div>
+
+              {/* Trending Sidebar - 1/3 width */}
+              <div className="lg:col-span-1">
+                <TrendingList />
+              </div>
+            </div>
           </motion.div>
         )}
 

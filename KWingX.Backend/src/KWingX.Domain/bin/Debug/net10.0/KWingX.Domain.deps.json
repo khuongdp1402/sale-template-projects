@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "KWingX.Domain/1.0.0": {
+        "runtime": {
+          "KWingX.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "KWingX.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
