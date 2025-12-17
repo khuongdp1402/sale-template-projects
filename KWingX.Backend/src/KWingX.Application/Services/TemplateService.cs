@@ -28,8 +28,7 @@ public class TemplateService : ITemplateService
 
         return new PagedResponse<TemplateListItemDto>
         {
-            Page = pagedTe
-            mplates.Page,
+            Page = pagedTemplates.Page,
             PageSize = pagedTemplates.PageSize,
             Total = pagedTemplates.Total,
             Items = pagedTemplates.Items.Adapt<List<TemplateListItemDto>>()
