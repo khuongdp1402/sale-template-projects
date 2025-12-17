@@ -63,16 +63,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2024-10-01',
     popularityScore: 92,
     gallery: [
-      { type: 'image', src: '/templates/spa-glow/hero.png', thumb: '/templates/thumbs/spa-glow-hero.png', title: 'Hero' },
-      { type: 'image', src: '/templates/spa-glow/booking.png', thumb: '/templates/thumbs/spa-glow-booking.png', title: 'Đặt lịch' },
-      { type: 'video', src: '/videos/spa-glow-demo.mp4', thumb: '/templates/thumbs/spa-glow-video.png', title: 'Demo video' }
+      { type: 'image', src: '/templates/covers/template-01.svg', thumb: '/templates/thumbs/template-01.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-02.svg', thumb: '/templates/thumbs/template-02.svg', title: 'Services' },
+      { type: 'image', src: '/templates/covers/template-03.svg', thumb: '/templates/thumbs/template-03.svg', title: 'Booking' },
+      { type: 'image', src: '/templates/covers/template-04.svg', thumb: '/templates/thumbs/template-04.svg', title: 'Reviews' },
+      { type: 'video', src: '/videos/demo-01.mp4', thumb: '/templates/thumbs/template-01.svg', title: 'Demo video' },
+      { type: 'image', src: '/templates/covers/template-05.svg', thumb: '/templates/thumbs/template-05.svg', title: 'Gallery' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/spa-glow/card-1.png' },
-      { type: 'image', src: '/templates/spa-glow/card-2.png' },
-      { type: 'image', src: '/templates/spa-glow/card-3.png' }
+      { type: 'image', src: '/templates/thumbs/template-01.svg' },
+      { type: 'image', src: '/templates/thumbs/template-02.svg' },
+      { type: 'image', src: '/templates/thumbs/template-03.svg' }
     ],
-    demoVideo: { title: 'Spa Glow Demo', src: '/videos/spa-glow-demo.mp4', poster: '/templates/thumbs/spa-glow-video.png' },
+    demoVideo: { title: 'Spa Glow Demo', src: '/videos/demo-01.mp4', poster: '/templates/thumbs/template-01.svg' },
     features: ['Đặt lịch nhanh', 'Combo ưu đãi', 'Popup khuyến mãi', 'Tích hợp chat', 'SEO sẵn sàng'],
     usedByCustomers: [
       { name: 'Aura Clinic', industry: 'Spa', quote: 'Tăng 35% booking trong 2 tuần đầu.' },
@@ -99,15 +102,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2025-01-10',
     popularityScore: 95,
     gallery: [
-      { type: 'image', src: '/templates/proxy-hub/hero.png', thumb: '/templates/thumbs/proxy-hub-hero.png' },
-      { type: 'image', src: '/templates/proxy-hub/status.png', thumb: '/templates/thumbs/proxy-hub-status.png' },
-      { type: 'video', src: '/videos/proxy-hub.mp4', thumb: '/templates/thumbs/proxy-hub-video.png', title: 'Live demo' }
+      { type: 'image', src: '/templates/covers/template-02.svg', thumb: '/templates/thumbs/template-02.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-06.svg', thumb: '/templates/thumbs/template-06.svg', title: 'Pricing' },
+      { type: 'image', src: '/templates/covers/template-07.svg', thumb: '/templates/thumbs/template-07.svg', title: 'Status' },
+      { type: 'video', src: '/videos/demo-02.mp4', thumb: '/templates/thumbs/template-02.svg', title: 'Live demo' },
+      { type: 'image', src: '/templates/covers/template-08.svg', thumb: '/templates/thumbs/template-08.svg', title: 'Features' },
+      { type: 'image', src: '/templates/covers/template-09.svg', thumb: '/templates/thumbs/template-09.svg', title: 'FAQ' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/proxy-hub/card-1.png' },
-      { type: 'image', src: '/templates/proxy-hub/card-2.png' }
+      { type: 'image', src: '/templates/thumbs/template-02.svg' },
+      { type: 'image', src: '/templates/thumbs/template-06.svg' },
+      { type: 'image', src: '/templates/thumbs/template-07.svg' }
     ],
-    demoVideo: { title: 'Proxy Hub Demo', src: '/videos/proxy-hub.mp4', poster: '/templates/thumbs/proxy-hub-video.png' },
+    demoVideo: { title: 'Proxy Hub Demo', src: '/videos/demo-02.mp4', poster: '/templates/thumbs/template-02.svg' },
     features: ['Bảng giá động', 'Status uptime', 'CTA mạnh', 'Tích hợp hỗ trợ', 'Blog/FAQ'],
     usedByCustomers: [
       { name: 'ProxyVN', industry: 'Proxy', quote: 'Chốt sale tăng 28% nhờ CTA rõ ràng.' },
@@ -133,15 +140,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2025-01-05',
     popularityScore: 88,
     gallery: [
-      { type: 'image', src: '/templates/gaming-accounts/hero.png', thumb: '/templates/thumbs/gaming-hero.png' },
-      { type: 'image', src: '/templates/gaming-accounts/store.png', thumb: '/templates/thumbs/gaming-store.png' },
-      { type: 'video', src: '/videos/gaming-accounts.mp4', thumb: '/templates/thumbs/gaming-video.png' }
+      { type: 'image', src: '/templates/covers/template-03.svg', thumb: '/templates/thumbs/template-03.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-08.svg', thumb: '/templates/thumbs/template-08.svg', title: 'Store' },
+      { type: 'image', src: '/templates/covers/template-09.svg', thumb: '/templates/thumbs/template-09.svg', title: 'Products' },
+      { type: 'video', src: '/videos/demo-03.mp4', thumb: '/templates/thumbs/template-03.svg', title: 'Demo video' },
+      { type: 'image', src: '/templates/covers/template-10.svg', thumb: '/templates/thumbs/template-10.svg', title: 'Checkout' },
+      { type: 'image', src: '/templates/covers/template-01.svg', thumb: '/templates/thumbs/template-01.svg', title: 'Reviews' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/gaming-accounts/card-1.png' },
-      { type: 'image', src: '/templates/gaming-accounts/card-2.png' }
+      { type: 'image', src: '/templates/thumbs/template-03.svg' },
+      { type: 'image', src: '/templates/thumbs/template-08.svg' },
+      { type: 'image', src: '/templates/thumbs/template-09.svg' }
     ],
-    demoVideo: { title: 'Gaming Accounts Demo', src: '/videos/gaming-accounts.mp4', poster: '/templates/thumbs/gaming-video.png' },
+    demoVideo: { title: 'Gaming Accounts Demo', src: '/videos/demo-03.mp4', poster: '/templates/thumbs/template-03.svg' },
     features: ['Kho sản phẩm', 'Lọc nhanh', 'Bảo hành', 'Thanh toán đa kênh', 'Review/Rating'],
     usedByCustomers: [
       { name: 'GameZone', industry: 'Gaming', quote: 'ROI ads tăng 25% nhờ UI rõ ràng.' },
@@ -168,14 +179,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2024-11-12',
     popularityScore: 90,
     gallery: [
-      { type: 'image', src: '/templates/social-boost/hero.png', thumb: '/templates/thumbs/social-boost-hero.png' },
-      { type: 'image', src: '/templates/social-boost/pricing.png', thumb: '/templates/thumbs/social-boost-pricing.png' }
+      { type: 'image', src: '/templates/covers/template-04.svg', thumb: '/templates/thumbs/template-04.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-05.svg', thumb: '/templates/thumbs/template-05.svg', title: 'Pricing' },
+      { type: 'image', src: '/templates/covers/template-06.svg', thumb: '/templates/thumbs/template-06.svg', title: 'Services' },
+      { type: 'video', src: '/videos/demo-04.mp4', thumb: '/templates/thumbs/template-04.svg', title: 'Demo video' },
+      { type: 'image', src: '/templates/covers/template-07.svg', thumb: '/templates/thumbs/template-07.svg', title: 'Testimonials' },
+      { type: 'image', src: '/templates/covers/template-08.svg', thumb: '/templates/thumbs/template-08.svg', title: 'FAQ' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/social-boost/card-1.png' },
-      { type: 'image', src: '/templates/social-boost/card-2.png' }
+      { type: 'image', src: '/templates/thumbs/template-04.svg' },
+      { type: 'image', src: '/templates/thumbs/template-05.svg' },
+      { type: 'image', src: '/templates/thumbs/template-06.svg' }
     ],
-    demoVideo: { title: 'Social Boost Demo', src: '/videos/social-boost.mp4', poster: '/templates/thumbs/social-boost-video.png' },
+    demoVideo: { title: 'Social Boost Demo', src: '/videos/demo-04.mp4', poster: '/templates/thumbs/template-04.svg' },
     features: ['Bảng giá linh hoạt', 'Gói combo', 'FAQ', 'Testimonial', 'Lead form'],
     usedByCustomers: [{ name: 'ViralUp', industry: 'Marketing' }, { name: 'InfluPro', industry: 'Creator services' }],
     supportContacts: { telegram: 'https://t.me/kwingx', messenger: 'https://m.me/kwingx' },
@@ -199,14 +215,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2024-09-20',
     popularityScore: 87,
     gallery: [
-      { type: 'image', src: '/templates/api-payment/hero.png', thumb: '/templates/thumbs/api-payment-hero.png' },
-      { type: 'image', src: '/templates/api-payment/docs.png', thumb: '/templates/thumbs/api-payment-docs.png' }
+      { type: 'image', src: '/templates/covers/template-05.svg', thumb: '/templates/thumbs/template-05.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-09.svg', thumb: '/templates/thumbs/template-09.svg', title: 'Docs' },
+      { type: 'image', src: '/templates/covers/template-10.svg', thumb: '/templates/thumbs/template-10.svg', title: 'API' },
+      { type: 'video', src: '/videos/demo-05.mp4', thumb: '/templates/thumbs/template-05.svg', title: 'Demo video' },
+      { type: 'image', src: '/templates/covers/template-01.svg', thumb: '/templates/thumbs/template-01.svg', title: 'Integration' },
+      { type: 'image', src: '/templates/covers/template-02.svg', thumb: '/templates/thumbs/template-02.svg', title: 'Security' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/api-payment/card-1.png' },
-      { type: 'image', src: '/templates/api-payment/card-2.png' }
+      { type: 'image', src: '/templates/thumbs/template-05.svg' },
+      { type: 'image', src: '/templates/thumbs/template-09.svg' },
+      { type: 'image', src: '/templates/thumbs/template-10.svg' }
     ],
-    demoVideo: { title: 'API Payment Demo', src: '/videos/api-payment.mp4', poster: '/templates/thumbs/api-payment-video.png' },
+    demoVideo: { title: 'API Payment Demo', src: '/videos/demo-05.mp4', poster: '/templates/thumbs/template-05.svg' },
     features: ['Docs tóm tắt', 'Case study', 'CTA đăng ký', 'Bảo mật', 'SLA rõ ràng'],
     usedByCustomers: [
       { name: 'PayFlex', industry: 'Fintech', quote: 'Thuyết phục khách B2B nhanh hơn nhờ case study rõ ràng.' }
@@ -231,14 +252,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2024-08-01',
     popularityScore: 84,
     gallery: [
-      { type: 'image', src: '/templates/tools-market/hero.png', thumb: '/templates/thumbs/tools-market-hero.png' },
-      { type: 'image', src: '/templates/tools-market/list.png', thumb: '/templates/thumbs/tools-market-list.png' }
+      { type: 'image', src: '/templates/covers/template-06.svg', thumb: '/templates/thumbs/template-06.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-07.svg', thumb: '/templates/thumbs/template-07.svg', title: 'Tools List' },
+      { type: 'image', src: '/templates/covers/template-08.svg', thumb: '/templates/thumbs/template-08.svg', title: 'Categories' },
+      { type: 'video', src: '/videos/demo-06.mp4', thumb: '/templates/thumbs/template-06.svg', title: 'Demo video' },
+      { type: 'image', src: '/templates/covers/template-09.svg', thumb: '/templates/thumbs/template-09.svg', title: 'Details' },
+      { type: 'image', src: '/templates/covers/template-10.svg', thumb: '/templates/thumbs/template-10.svg', title: 'Pricing' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/tools-market/card-1.png' },
-      { type: 'image', src: '/templates/tools-market/card-2.png' }
+      { type: 'image', src: '/templates/thumbs/template-06.svg' },
+      { type: 'image', src: '/templates/thumbs/template-07.svg' },
+      { type: 'image', src: '/templates/thumbs/template-08.svg' }
     ],
-    demoVideo: { title: 'Tools Market Demo', src: '/videos/tools-market.mp4', poster: '/templates/thumbs/tools-market-video.png' },
+    demoVideo: { title: 'Tools Market Demo', src: '/videos/demo-06.mp4', poster: '/templates/thumbs/template-06.svg' },
     features: ['Grid sản phẩm', 'Lead capture', 'Review', 'CTA đa kênh', 'SEO on-page'],
     usedByCustomers: [{ name: 'MMO Hub', industry: 'MMO' }, { name: 'ToolBox', industry: 'SaaS' }],
     supportContacts: { messenger: 'https://m.me/kwingx', phone: '0901234567' },
@@ -262,14 +288,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2024-12-05',
     popularityScore: 89,
     gallery: [
-      { type: 'image', src: '/templates/cosmetic-store/hero.png', thumb: '/templates/thumbs/cosmetic-hero.png' },
-      { type: 'image', src: '/templates/cosmetic-store/review.png', thumb: '/templates/thumbs/cosmetic-review.png' }
+      { type: 'image', src: '/templates/covers/template-07.svg', thumb: '/templates/thumbs/template-07.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-11.svg', thumb: '/templates/thumbs/template-11.svg', title: 'Products' },
+      { type: 'image', src: '/templates/covers/template-01.svg', thumb: '/templates/thumbs/template-01.svg', title: 'Reviews' },
+      { type: 'video', src: '/videos/demo-07.mp4', thumb: '/templates/thumbs/template-07.svg', title: 'Demo video' },
+      { type: 'image', src: '/templates/covers/template-02.svg', thumb: '/templates/thumbs/template-02.svg', title: 'Combos' },
+      { type: 'image', src: '/templates/covers/template-03.svg', thumb: '/templates/thumbs/template-03.svg', title: 'FAQ' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/cosmetic-store/card-1.png' },
-      { type: 'image', src: '/templates/cosmetic-store/card-2.png' }
+      { type: 'image', src: '/templates/thumbs/template-07.svg' },
+      { type: 'image', src: '/templates/thumbs/template-11.svg' },
+      { type: 'image', src: '/templates/thumbs/template-01.svg' }
     ],
-    demoVideo: { title: 'Cosmetic Store Demo', src: '/videos/cosmetic-store.mp4', poster: '/templates/thumbs/cosmetic-video.png' },
+    demoVideo: { title: 'Cosmetic Store Demo', src: '/videos/demo-07.mp4', poster: '/templates/thumbs/template-07.svg' },
     features: ['Combo/flash sale', 'KOL review', 'Upsell', 'FAQ', 'Form đặt hàng nhanh'],
     usedByCustomers: [{ name: 'GlowUp', industry: 'Cosmetics' }, { name: 'BeautyLane', industry: 'Beauty' }],
     supportContacts: { zalo: 'https://zalo.me/0999888777', phone: '0911222333' },
@@ -292,14 +323,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2024-07-15',
     popularityScore: 80,
     gallery: [
-      { type: 'image', src: '/templates/household/hero.png', thumb: '/templates/thumbs/household-hero.png' },
-      { type: 'image', src: '/templates/household/guide.png', thumb: '/templates/thumbs/household-guide.png' }
+      { type: 'image', src: '/templates/covers/template-08.svg', thumb: '/templates/thumbs/template-08.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-09.svg', thumb: '/templates/thumbs/template-09.svg', title: 'Products' },
+      { type: 'image', src: '/templates/covers/template-10.svg', thumb: '/templates/thumbs/template-10.svg', title: 'Guide' },
+      { type: 'video', src: '/videos/demo-08.mp4', thumb: '/templates/thumbs/template-08.svg', title: 'Demo video' },
+      { type: 'image', src: '/templates/covers/template-01.svg', thumb: '/templates/thumbs/template-01.svg', title: 'Warranty' },
+      { type: 'image', src: '/templates/covers/template-02.svg', thumb: '/templates/thumbs/template-02.svg', title: 'Shipping' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/household/card-1.png' },
-      { type: 'image', src: '/templates/household/card-2.png' }
+      { type: 'image', src: '/templates/thumbs/template-08.svg' },
+      { type: 'image', src: '/templates/thumbs/template-09.svg' },
+      { type: 'image', src: '/templates/thumbs/template-10.svg' }
     ],
-    demoVideo: { title: 'Household Demo', src: '/videos/household.mp4', poster: '/templates/thumbs/household-video.png' },
+    demoVideo: { title: 'Household Demo', src: '/videos/demo-08.mp4', poster: '/templates/thumbs/template-08.svg' },
     features: ['Combo', 'Bảo hành', 'Hướng dẫn', 'Form nhanh', 'Ưu đãi vận chuyển'],
     usedByCustomers: [{ name: 'CleanHome', industry: 'Household' }],
     supportContacts: { messenger: 'https://m.me/kwingx', phone: '0988111000' },
@@ -322,14 +358,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2024-12-28',
     popularityScore: 73,
     gallery: [
-      { type: 'image', src: '/templates/fashion/hero.png', thumb: '/templates/thumbs/fashion-hero.png' },
-      { type: 'image', src: '/templates/fashion/lookbook.png', thumb: '/templates/thumbs/fashion-lookbook.png' }
+      { type: 'image', src: '/templates/covers/template-09.svg', thumb: '/templates/thumbs/template-09.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-11.svg', thumb: '/templates/thumbs/template-11.svg', title: 'Lookbook' },
+      { type: 'image', src: '/templates/covers/template-10.svg', thumb: '/templates/thumbs/template-10.svg', title: 'Size Chart' },
+      { type: 'video', src: '/videos/demo-09.mp4', thumb: '/templates/thumbs/template-09.svg', title: 'Demo video' },
+      { type: 'image', src: '/templates/covers/template-01.svg', thumb: '/templates/thumbs/template-01.svg', title: 'Reviews' },
+      { type: 'image', src: '/templates/covers/template-02.svg', thumb: '/templates/thumbs/template-02.svg', title: 'Checkout' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/fashion/card-1.png' },
-      { type: 'image', src: '/templates/fashion/card-2.png' }
+      { type: 'image', src: '/templates/thumbs/template-09.svg' },
+      { type: 'image', src: '/templates/thumbs/template-11.svg' },
+      { type: 'image', src: '/templates/thumbs/template-10.svg' }
     ],
-    demoVideo: { title: 'Fashion Demo', src: '/videos/fashion.mp4', poster: '/templates/thumbs/fashion-video.png' },
+    demoVideo: { title: 'Fashion Demo', src: '/videos/demo-09.mp4', poster: '/templates/thumbs/template-09.svg' },
     features: ['Lookbook', 'Size chart', 'Review', 'Freeship', 'Form mua nhanh'],
     usedByCustomers: [{ name: 'TrendWear', industry: 'Fashion' }],
     supportContacts: { zalo: 'https://zalo.me/0777333444' },
@@ -352,14 +393,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2024-10-15',
     popularityScore: 86,
     gallery: [
-      { type: 'image', src: '/templates/b2b/hero.png', thumb: '/templates/thumbs/b2b-hero.png' },
-      { type: 'video', src: '/videos/b2b-landing.mp4', thumb: '/templates/thumbs/b2b-video.png' }
+      { type: 'image', src: '/templates/covers/template-10.svg', thumb: '/templates/thumbs/template-10.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-05.svg', thumb: '/templates/thumbs/template-05.svg', title: 'Solution' },
+      { type: 'image', src: '/templates/covers/template-06.svg', thumb: '/templates/thumbs/template-06.svg', title: 'KPI' },
+      { type: 'video', src: '/videos/demo-10.mp4', thumb: '/templates/thumbs/template-10.svg', title: 'Demo video' },
+      { type: 'image', src: '/templates/covers/template-07.svg', thumb: '/templates/thumbs/template-07.svg', title: 'Case Study' },
+      { type: 'image', src: '/templates/covers/template-08.svg', thumb: '/templates/thumbs/template-08.svg', title: 'Lead Form' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/b2b/card-1.png' },
-      { type: 'image', src: '/templates/b2b/card-2.png' }
+      { type: 'image', src: '/templates/thumbs/template-10.svg' },
+      { type: 'image', src: '/templates/thumbs/template-05.svg' },
+      { type: 'image', src: '/templates/thumbs/template-06.svg' }
     ],
-    demoVideo: { title: 'B2B Landing Demo', src: '/videos/b2b-landing.mp4', poster: '/templates/thumbs/b2b-video.png' },
+    demoVideo: { title: 'B2B Landing Demo', src: '/videos/demo-10.mp4', poster: '/templates/thumbs/template-10.svg' },
     features: ['Pain & solution', 'KPI', 'Case study', 'Lead form', 'Trust signals'],
     usedByCustomers: [{ name: 'DataPilot', industry: 'Analytics' }, { name: 'FlowAI', industry: 'Automation' }],
     supportContacts: { telegram: 'https://t.me/kwingx', messenger: 'https://m.me/kwingx' },
@@ -371,7 +417,7 @@ export const templates: TemplateItem[] = [
     shortDescription: 'Landing nhanh cho chiến dịch ads, tối ưu CTA và social proof.',
     longDescription:
       'Dành cho chiến dịch ads nhanh: hero ngắn, CTA nổi bật, social proof và FAQ để chốt nhanh.',
-    categories: ['b2c', 'landing', 'digital-products'],
+    categories: ['b2c', 'digital-products'],
     templateType: 'Landing',
     audience: 'B2C',
     price: 580000,
@@ -382,14 +428,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2024-06-25',
     popularityScore: 82,
     gallery: [
-      { type: 'image', src: '/templates/b2c-fast/hero.png', thumb: '/templates/thumbs/b2c-hero.png' },
-      { type: 'image', src: '/templates/b2c-fast/faq.png', thumb: '/templates/thumbs/b2c-faq.png' }
+      { type: 'image', src: '/templates/covers/template-11.svg', thumb: '/templates/thumbs/template-11.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-01.svg', thumb: '/templates/thumbs/template-01.svg', title: 'CTA' },
+      { type: 'image', src: '/templates/covers/template-02.svg', thumb: '/templates/thumbs/template-02.svg', title: 'Social Proof' },
+      { type: 'video', src: '/videos/demo-11.mp4', thumb: '/templates/thumbs/template-11.svg', title: 'Demo video' },
+      { type: 'image', src: '/templates/covers/template-03.svg', thumb: '/templates/thumbs/template-03.svg', title: 'FAQ' },
+      { type: 'image', src: '/templates/covers/template-04.svg', thumb: '/templates/thumbs/template-04.svg', title: 'Form' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/b2c-fast/card-1.png' },
-      { type: 'image', src: '/templates/b2c-fast/card-2.png' }
+      { type: 'image', src: '/templates/thumbs/template-11.svg' },
+      { type: 'image', src: '/templates/thumbs/template-01.svg' },
+      { type: 'image', src: '/templates/thumbs/template-02.svg' }
     ],
-    demoVideo: { title: 'B2C Fast Demo', src: '/videos/b2c-fast.mp4', poster: '/templates/thumbs/b2c-video.png' },
+    demoVideo: { title: 'B2C Fast Demo', src: '/videos/demo-11.mp4', poster: '/templates/thumbs/template-11.svg' },
     features: ['Hero ngắn', 'CTA nổi bật', 'Social proof', 'FAQ', 'Form nhanh'],
     usedByCustomers: [{ name: 'QuickAds', industry: 'Marketing' }],
     supportContacts: { messenger: 'https://m.me/kwingx' },
@@ -412,14 +463,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2024-12-18',
     popularityScore: 77,
     gallery: [
-      { type: 'image', src: '/templates/digital-product/hero.png', thumb: '/templates/thumbs/digital-hero.png' },
-      { type: 'image', src: '/templates/digital-product/checkout.png', thumb: '/templates/thumbs/digital-checkout.png' }
+      { type: 'image', src: '/templates/covers/template-12.svg', thumb: '/templates/thumbs/template-12.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-05.svg', thumb: '/templates/thumbs/template-05.svg', title: 'Features' },
+      { type: 'image', src: '/templates/covers/template-06.svg', thumb: '/templates/thumbs/template-06.svg', title: 'Checkout' },
+      { type: 'video', src: '/videos/demo-12.mp4', thumb: '/templates/thumbs/template-12.svg', title: 'Demo video' },
+      { type: 'image', src: '/templates/covers/template-07.svg', thumb: '/templates/thumbs/template-07.svg', title: 'Testimonials' },
+      { type: 'image', src: '/templates/covers/template-08.svg', thumb: '/templates/thumbs/template-08.svg', title: 'FAQ' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/digital-product/card-1.png' },
-      { type: 'image', src: '/templates/digital-product/card-2.png' }
+      { type: 'image', src: '/templates/thumbs/template-12.svg' },
+      { type: 'image', src: '/templates/thumbs/template-05.svg' },
+      { type: 'image', src: '/templates/thumbs/template-06.svg' }
     ],
-    demoVideo: { title: 'Digital Product Demo', src: '/videos/digital-product.mp4', poster: '/templates/thumbs/digital-video.png' },
+    demoVideo: { title: 'Digital Product Demo', src: '/videos/demo-12.mp4', poster: '/templates/thumbs/template-12.svg' },
     features: ['Lợi ích', 'Feedback', 'Checkout đơn giản', 'Ưu đãi', 'FAQ'],
     usedByCustomers: [{ name: 'CourseHub', industry: 'E-learning' }],
     supportContacts: { zalo: 'https://zalo.me/0666999000' },
@@ -442,14 +498,19 @@ export const templates: TemplateItem[] = [
     createdAt: '2024-05-12',
     popularityScore: 70,
     gallery: [
-      { type: 'image', src: '/templates/payment-lite/hero.png', thumb: '/templates/thumbs/payment-lite-hero.png' },
-      { type: 'image', src: '/templates/payment-lite/security.png', thumb: '/templates/thumbs/payment-lite-security.png' }
+      { type: 'image', src: '/templates/covers/template-05.svg', thumb: '/templates/thumbs/template-05.svg', title: 'Hero' },
+      { type: 'image', src: '/templates/covers/template-09.svg', thumb: '/templates/thumbs/template-09.svg', title: 'Security' },
+      { type: 'image', src: '/templates/covers/template-10.svg', thumb: '/templates/thumbs/template-10.svg', title: 'Speed' },
+      { type: 'video', src: '/videos/demo-13.mp4', thumb: '/templates/thumbs/template-05.svg', title: 'Demo video' },
+      { type: 'image', src: '/templates/covers/template-01.svg', thumb: '/templates/thumbs/template-01.svg', title: 'Integration' },
+      { type: 'image', src: '/templates/covers/template-02.svg', thumb: '/templates/thumbs/template-02.svg', title: 'Support' }
     ],
     cardMedia: [
-      { type: 'image', src: '/templates/payment-lite/card-1.png' },
-      { type: 'image', src: '/templates/payment-lite/card-2.png' }
+      { type: 'image', src: '/templates/thumbs/template-05.svg' },
+      { type: 'image', src: '/templates/thumbs/template-09.svg' },
+      { type: 'image', src: '/templates/thumbs/template-10.svg' }
     ],
-    demoVideo: { title: 'Payment API Demo', src: '/videos/payment-lite.mp4', poster: '/templates/thumbs/payment-lite-video.png' },
+    demoVideo: { title: 'Payment API Demo', src: '/videos/demo-13.mp4', poster: '/templates/thumbs/template-05.svg' },
     features: ['Bảo mật', 'Tốc độ', 'CTA đăng ký', 'Tích hợp dễ', 'Hỗ trợ nhanh'],
     usedByCustomers: [{ name: 'PayLink', industry: 'Fintech' }],
     supportContacts: { telegram: 'https://t.me/kwingx' },

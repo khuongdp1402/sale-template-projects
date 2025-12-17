@@ -7,6 +7,14 @@ import { TemplateDetailPage } from '../pages/TemplateDetailPage';
 import { BlogPage } from '../pages/BlogPage';
 import { BlogDetailPage } from '../pages/BlogDetailPage';
 import { ContactPage } from '../pages/ContactPage';
+import { LoginPage } from '../pages/LoginPage';
+import { RegisterPage } from '../pages/RegisterPage';
+import { DashboardLayout } from '../layouts/DashboardLayout';
+import { DashboardHome } from '../pages/dashboard/DashboardHome';
+import { PurchasesPage } from '../pages/dashboard/PurchasesPage';
+import { ApiAccessPage } from '../pages/dashboard/ApiAccessPage';
+import { AccountSettingsPage } from '../pages/dashboard/AccountSettingsPage';
+import { RequireAuth } from '../components/auth/RequireAuth';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +44,40 @@ const router = createBrowserRouter([
       {
         path: 'contact',
         element: <ContactPage />,
+      },
+    ],
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />,
+  },
+  {
+    path: '/dashboard',
+    element: (
+      <RequireAuth>
+        <DashboardLayout />
+      </RequireAuth>
+    ),
+    children: [
+      {
+        index: true,
+        element: <DashboardHome />,
+      },
+      {
+        path: 'purchases',
+        element: <PurchasesPage />,
+      },
+      {
+        path: 'api',
+        element: <ApiAccessPage />,
+      },
+      {
+        path: 'account',
+        element: <AccountSettingsPage />,
       },
     ],
   },

@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: kwingx_postgres
+    environment:
+      POSTGRES_USER: kwx
+      POSTGRES_PASSWORD: 1
+      POSTGRES_DB: kwx
+    ports:
+      - "5432:5432"
+    volumes:
+      - kwx_db:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: src/KWingX.WebApi/Dockerfile
+    container_name: kwingx_api
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Postgres=Host=postgres;Port=5432;Database=kwx;Username=kwx;Password=kwxpass
+      - Jwt__Issuer=K-WingX
+      - Jwt__Audience=K-WingX
+      - Jwt__Key=super_dev_secret_key_change_later
+    restart: unless-stopped
+
+volumes:
+  kwx_db:

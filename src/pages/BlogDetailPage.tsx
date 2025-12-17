@@ -5,6 +5,7 @@ import { getPostBySlug, getAllPosts } from '../data/blog';
 import { BlogMarkdown } from '../components/blog/BlogMarkdown';
 import { BlogMeta } from '../components/blog/BlogMeta';
 import { RelatedPosts } from '../components/blog/RelatedPosts';
+import { ReadingProgressBar } from '../components/blog/ReadingProgressBar';
 
 export const BlogDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -50,6 +51,9 @@ export const BlogDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900">
+      {/* Reading Progress Bar */}
+      <ReadingProgressBar />
+
       {/* Breadcrumb */}
       <div className="bg-slate-50 dark:bg-slate-800 py-4 border-b border-slate-200 dark:border-slate-700">
         <div className="container mx-auto px-4">
@@ -141,7 +145,7 @@ export const BlogDetailPage: React.FC = () => {
             Bạn muốn triển khai nhanh?
           </h3>
           <p className="text-slate-600 dark:text-slate-300 mb-8 max-w-2xl mx-auto">
-            K-WingX có sẵn hơn 50+ template chuyên nghiệp cho MMO, automation và e-commerce. 
+            K-WingX có sẵn hơn 50+ template chuyên nghiệp cho MMO, automation và e-commerce.
             Hỗ trợ tùy chỉnh theo yêu cầu của bạn.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
