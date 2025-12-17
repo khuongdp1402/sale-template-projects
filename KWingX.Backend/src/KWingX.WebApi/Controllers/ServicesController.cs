@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace KWingX.WebApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class ServicesController : ControllerBase
 {
     // Simplified: In real app use Mediator Queries

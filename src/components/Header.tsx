@@ -57,7 +57,6 @@ export const Header: React.FC = () => {
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-[#1a2d5a]/70 bg-[#050f2a]/90 text-white backdrop-blur">
         <div className="main-container flex items-center justify-between py-4 gap-4">
           <div className="flex items-center gap-3">
-            <img src="/logo.PNG" alt="K-WingX logo" className="h-10 w-10 rounded-lg bg-white/5 p-1.5 shadow-lg" />
             <div className="hidden md:block">
               <img src="/logo-text.PNG" alt="K-WingX" className="h-9 w-auto drop-shadow-[0_6px_20px_rgba(62,184,255,0.35)]" />
             </div>

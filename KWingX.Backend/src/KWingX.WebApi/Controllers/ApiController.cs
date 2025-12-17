@@ -8,7 +8,8 @@ namespace KWingX.WebApi.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/me/api-key")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/me/api-key")]
 public class ApiController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -17,7 +18,7 @@ public class ApiController : ControllerBase
     {
         _mediator = mediator;
     }
-¬
+
     [HttpGet]
     public async Task<ActionResult<string>> GetApiKey()
     {

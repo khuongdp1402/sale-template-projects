@@ -1,32 +1,32 @@
-using KWingX.Application.Features.Blog.Queries;
-using MediatR;
+using KWingX.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KWingX.WebApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class BlogController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    private readonly IBlogPostService _blogPostService;
 
-    public BlogController(IMediator mediator)
+    public BlogController(IBlogPostService blogPostService)
     {
-        _mediator = mediator;
+        _blogPostService = blogPostService;
     }
 
     [HttpGet("posts")]
-    public async Task<ActionResult<List<BlogPostDto>>> GetPosts([FromQuery] GetBlogPostsQuery query)
+    public async Task<ActionResult> GetPosts([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? category = null)
     {
-        return Ok(await _mediator.Send(query));
+        var result = await _blogPostService.GetListAsync(page, pageSize, status: Domain.Enums.BlogPostStatus.Published, category: category);
+        return Ok(result);
     }
 
     [HttpGet("posts/{slug}")]
-    public async Task<ActionResult<BlogPostDto>> GetPost(string slug)
+    public async Task<ActionResult> GetPost(string slug)
     {
-        var result = await _mediator.Send(new GetBlogPostDetailQuery(slug));
-        if (result == null) return NotFound();
-        // Map to DTO if needed, or return entity directly for now (simplified)
-        return Ok(result);
+        var post = await _blogPostService.GetBySlugAsync(slug);
+        if (post == null) return NotFound();
+        return Ok(post);
     }
 }

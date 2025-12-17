@@ -1,4 +1,5 @@
 using KWingX.Domain.Common;
+using KWingX.Domain.Enums;
 
 namespace KWingX.Domain.Entities;
 
@@ -15,6 +16,7 @@ public class BlogPost : BaseEntity, IAggregateRoot
     public bool IsFeatured { get; set; }
     public bool IsTrending { get; set; }
     public int Views { get; set; }
+    public BlogPostStatus Status { get; set; } = BlogPostStatus.Draft;
 }
 
 public class LandingSection : BaseEntity

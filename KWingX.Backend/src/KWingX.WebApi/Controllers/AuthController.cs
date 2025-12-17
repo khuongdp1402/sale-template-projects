@@ -1,26 +1,27 @@
-using KWingX.Application.Features.Auth.Commands;
-using MediatR;
+using KWingX.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KWingX.WebApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    private readonly IAuthService _authService;
 
-    public AuthController(IMediator mediator)
+    public AuthController(IAuthService authService)
     {
-        _mediator = mediator;
+        _authService = authService;
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<AuthResponse>> Login(LoginCommand command)
+    public async Task<ActionResult> Login([FromBody] string usernameOrEmail, [FromBody] string password)
     {
         try
         {
-            return Ok(await _mediator.Send(command));
+            var result = await _authService.LoginAsync(usernameOrEmail, password);
+            return Ok(result);
         }
         catch (Exception ex)
         {
@@ -29,11 +30,12 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<AuthResponse>> Register(RegisterCommand command)
+    public async Task<ActionResult> Register(string username, string email, string password, string confirmPassword)
     {
         try
         {
-            return Ok(await _mediator.Send(command));
+            var result = await _authService.RegisterAsync(username, email, password, confirmPassword);
+            return Ok(result);
         }
         catch (Exception ex)
         {

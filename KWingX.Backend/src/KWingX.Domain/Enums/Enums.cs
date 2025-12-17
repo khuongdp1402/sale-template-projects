@@ -38,3 +38,80 @@ public enum KeyStatus
     Active,
     Revoked
 }
+
+public enum UserRole
+{
+    SuperAdmin,
+    Admin,
+    Editor,
+    Support,
+    Finance,
+    Ops
+}
+
+public enum TemplateStatus
+{
+    Draft,
+    Published,
+    Archived
+}
+
+public enum BlogPostStatus
+{
+    Draft,
+    Published
+}
+
+public enum OrderStatus
+{
+    Pending,
+    Processing,
+    Completed,
+    Cancelled,
+    Refunded
+}
+
+public enum PaymentStatus
+{
+    Pending,
+    Success,
+    Failed
+}
+
+public enum LogType
+{
+    Payment,
+    Deploy,
+    Infra,
+    Provision,
+    Webhook
+}
+
+public enum LogSeverity
+{
+    Info,
+    Warn,
+    Error
+}
+
+public enum ContactRequestStatus
+{
+    New,
+    InProgress,
+    Done
+}
+
+public enum DeploymentStatus
+{
+    Queued,
+    Running,
+    Success,
+    Failed
+}
+
+public enum DeploymentEnvironment
+{
+    Dev,
+    Staging,
+    Prod
+}

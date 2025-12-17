@@ -1,11 +1,18 @@
 using KWingX.Application;
+using KWingX.Application.Mapping;
+using KWingX.Application.Options;
 using KWingX.Infrastructure;
 using KWingX.Infrastructure.Persistence;
+using KWingX.WebApi.Authorization;
+using KWingX.WebApi.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +20,46 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Bind strongly-typed options
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+builder.Services.Configure<DatabaseSettings>(options =>
+{
+    // Bind from custom section if present
+    builder.Configuration.GetSection("DatabaseSettings").Bind(options);
+
+    // Always also bind ConnectionStrings:Postgres into DatabaseSettings.ConnectionStrings.Postgres
+    var postgres = builder.Configuration.GetConnectionString("Postgres")
+                   ?? builder.Configuration["ConnectionStrings:Postgres"];
+
+    if (!string.IsNullOrWhiteSpace(postgres))
+    {
+        options.ConnectionStrings.Postgres = postgres;
+    }
+});
+builder.Services.Configure<GoogleOptions>(builder.Configuration.GetSection("Google"));
+builder.Services.Configure<PaymentOptions>(builder.Configuration.GetSection("Payments"));
+builder.Services.Configure<TelegramOptions>(builder.Configuration.GetSection("Telegram"));
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// API Versioning
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = ApiVersionReader.Combine(
+        new UrlSegmentApiVersionReader()
+    );
+});
+
+builder.Services.AddVersionedApiExplorer(setup =>
+{
+    setup.GroupNameFormat = "'v'VVV";
+    setup.SubstituteApiVersionInUrl = true;
+});
+
 builder.Services.AddExceptionHandler<KWingX.WebApi.Middleware.GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
@@ -33,10 +78,16 @@ builder.Services.AddCors(options =>
 // Health Checks
 builder.Services.AddHealthChecks();
 
-// Swagger with JWT
+// Swagger with JWT and API Versioning
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "K-WingX API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "K-WingX API",
+        Version = "v1",
+        Description = "K-WingX API Documentation"
+    });
+    
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -61,29 +112,42 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// Authorization Policies
+builder.Services.AddAuthorizationPolicies();
+
 // JWT Auth
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        // Use strongly-typed JwtOptions via IOptions
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "super_secret_key_must_be_long_enough_for_hs256"))
+            ValidIssuer = AppSettingHelper.Jwt.Issuer,
+            ValidAudience = AppSettingHelper.Jwt.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(string.IsNullOrWhiteSpace(AppSettingHelper.Jwt.Key)
+                    ? throw new InvalidOperationException("Jwt:Key is not configured. Set Jwt:Key or environment variable Jwt__Key.")
+                    : AppSettingHelper.Jwt.Key))
         };
     });
 
 var app = builder.Build();
 
+// Initialize static DI helper for legacy/static usage
+DependencyInjectionHelper.Init(app.Services);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "K-WingX API v1");
+    });
 }
 
 // Auto-migrate on startup
