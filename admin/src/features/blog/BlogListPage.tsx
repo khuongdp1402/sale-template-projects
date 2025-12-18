@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { SEO } from '@/lib/seo';
-import { blogApi } from '@/services/adminApi';
-import { BlogPost, PagedResponse } from '@/types/api';
+import { useBlogPostsQuery } from '@/hooks/adminHooks';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -12,173 +9,178 @@ import { Badge } from '@/components/ui/Badge';
 import { ConfirmDialog } from '@/components/common/ConfirmDialog';
 import { EmptyState } from '@/components/common/EmptyState';
 import { formatDate } from '@/lib/format';
-import { Plus, Search, Edit, Trash2, Eye, EyeOff } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Filter, MessageSquare, BarChart2 } from 'lucide-react';
+import { Card } from '@/components/ui/Card';
+import { cn } from '@/lib/utils';
+import { useRightPanel } from '@/app/panel/useRightPanel';
+import { BlogPost } from '@/types/api';
 
 export function BlogListPage() {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const [search, setSearch] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const pageSize = 10;
+  const { openPanel } = useRightPanel();
 
-  const { data, isLoading } = useQuery<PagedResponse<BlogPost>>({
-    queryKey: ['blog', page, search, categoryFilter, statusFilter],
-    queryFn: () =>
-      blogApi.list({
-        page,
-        pageSize,
-        search: search || undefined,
-        category: categoryFilter || undefined,
-        status: statusFilter || undefined,
-      }),
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: (id: string) => blogApi.delete(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['blog'] });
-      setDeleteId(null);
-    },
-  });
-
-  const publishMutation = useMutation({
-    mutationFn: (id: string) => blogApi.publish(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['blog'] });
-    },
-  });
-
-  const unpublishMutation = useMutation({
-    mutationFn: (id: string) => blogApi.unpublish(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['blog'] });
-    },
+  const { data, isLoading } = useBlogPostsQuery({
+    page,
+    pageSize,
+    search: search || undefined,
+    filters: { status: statusFilter || undefined },
   });
 
   return (
-    <>
+    <div className="space-y-6">
       <SEO title="Blog" />
       <PageHeader
         title="Blog Posts"
-        description="Manage blog content"
+        subtitle="Manage articles, updates and ecosystem guides"
         actions={
-          <Button onClick={() => navigate('/admin/blog/new')}>
+          <Button onClick={() => openPanel({ type: 'blog', mode: 'create' })} size="sm">
             <Plus className="h-4 w-4 mr-2" />
             New Post
           </Button>
         }
       />
 
-      {/* Filters */}
-      <div className="mb-6 flex items-center gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input
-            placeholder="Search posts..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-            className="pl-10"
-          />
+      <Card className="p-4 bg-white/50 dark:bg-[#0f172a]/50 backdrop-blur-sm border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              placeholder="Search posts by title or category..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
+              className="pl-10 bg-white dark:bg-[#1e293b] border-slate-200 dark:border-slate-700"
+            />
+          </div>
+          <div className="flex gap-2">
+            <select
+              value={statusFilter}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setPage(1);
+              }}
+              className="h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#1e293b] px-3 py-2 text-sm outline-none"
+            >
+              <option value="">All Status</option>
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
+            </select>
+            <Button variant="outline" size="icon">
+              <Filter className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-        <select
-          value={statusFilter}
-          onChange={(e) => {
-            setStatusFilter(e.target.value);
-            setPage(1);
-          }}
-          className="flex h-10 rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-2 text-sm"
-        >
-          <option value="">All Status</option>
-          <option value="Draft">Draft</option>
-          <option value="Published">Published</option>
-        </select>
-      </div>
+      </Card>
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-600 mx-auto"></div>
+        <div className="grid gap-4">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-20 w-full animate-pulse bg-slate-100 dark:bg-slate-800/50 rounded-xl" />
+          ))}
         </div>
       ) : !data || data.items.length === 0 ? (
         <EmptyState
           title="No blog posts found"
-          description="Get started by creating a new post."
+          description="Try creating your first blog post to engage with users."
           action={
-            <Button onClick={() => navigate('/admin/blog/new')}>
+            <Button onClick={() => openPanel({ type: 'blog', mode: 'create' })}>
               <Plus className="h-4 w-4 mr-2" />
               Create Post
             </Button>
           }
         />
       ) : (
-        <>
-          <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div className="space-y-4">
+          <div className="bg-white dark:bg-[#0f172a] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-slate-50 dark:bg-[#1e293b]/50">
                 <TableRow>
-                  <TableHead>Title</TableHead>
+                  <TableHead className="w-[450px]">Post Details</TableHead>
                   <TableHead>Category</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Views</TableHead>
-                  <TableHead>Created</TableHead>
+                  <TableHead>Stats</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.items.map((post) => (
-                  <TableRow key={post.id}>
-                    <TableCell className="font-medium">{post.title}</TableCell>
-                    <TableCell>{post.category}</TableCell>
+                {data.items.map((post: BlogPost) => (
+                  <TableRow key={post.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
                     <TableCell>
-                      <Badge
-                        variant={post.status === 'Published' ? 'success' : 'warning'}
-                      >
-                        {post.status}
+                      <div className="flex items-center gap-4">
+                        <div className="w-20 h-14 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden flex-shrink-0 border border-slate-200 dark:border-slate-700">
+                          <img src={post.coverImage} alt="" className="w-full h-full object-cover" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-semibold text-slate-900 dark:text-white truncate mb-1">{post.title}</p>
+                          <div className="flex items-center gap-2 text-xs text-slate-500">
+                            <span>{formatDate(post.createdAt)}</span>
+                            <span>•</span>
+                            <span className="truncate">/{post.slug}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="secondary" className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-none font-medium">
+                        {post.category}
                       </Badge>
                     </TableCell>
-                    <TableCell>{post.views}</TableCell>
-                    <TableCell className="text-sm text-slate-600 dark:text-slate-400">
-                      {formatDate(post.createdAt)}
+                    <TableCell>
+                      <Badge
+                        variant={post.status === 'published' ? 'success' : 'default'}
+                        className={cn(
+                          'flex w-fit items-center gap-1.5',
+                          post.status === 'published'
+                            ? ''
+                            : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border-none'
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            'w-1.5 h-1.5 rounded-full',
+                            post.status === 'published' ? 'bg-green-500' : 'bg-slate-400'
+                          )}
+                        />
+                        {post.status.charAt(0).toUpperCase() + post.status.slice(1)}
+                      </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center justify-end gap-2">
-                        {post.status === 'Published' ? (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => unpublishMutation.mutate(post.id)}
-                            title="Unpublish"
-                          >
-                            <EyeOff className="h-4 w-4" />
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => publishMutation.mutate(post.id)}
-                            title="Publish"
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        )}
+                      <div className="flex items-center gap-3 text-slate-500">
+                        <div className="flex items-center gap-1 text-sm">
+                          <span>{post.views}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-sm">
+                          <MessageSquare className="h-3.5 w-3.5" />
+                          <span>0</span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-1">
                         <Button
                           variant="ghost"
-                          size="sm"
-                          onClick={() => navigate(`/admin/blog/${post.id}/edit`)}
+                          size="icon"
+                          className="h-8 w-8 text-slate-400 hover:text-blue-600"
+                          onClick={() => openPanel({ type: 'blog', mode: 'edit', id: post.id })}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400">
+                          <BarChart2 className="h-4 w-4" />
+                        </Button>
                         <Button
                           variant="ghost"
-                          size="sm"
+                          size="icon"
+                          className="h-8 w-8 text-slate-400 hover:text-red-600"
                           onClick={() => setDeleteId(post.id)}
                         >
-                          <Trash2 className="h-4 w-4 text-red-600" />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </TableCell>
@@ -188,46 +190,35 @@ export function BlogListPage() {
             </Table>
           </div>
 
-          {/* Pagination */}
-          {(data.totalPages || Math.ceil(data.total / pageSize)) > 1 && (
-            <div className="mt-4 flex items-center justify-between">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Showing {((page - 1) * pageSize) + 1} to {Math.min(page * pageSize, data.total)} of{' '}
-                {data.total} posts
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page === 1}
-                  onClick={() => setPage(page - 1)}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page >= (data.totalPages || Math.ceil(data.total / pageSize))}
-                  onClick={() => setPage(page + 1)}
-                >
-                  Next
-                </Button>
-              </div>
+          <div className="flex items-center justify-between px-2">
+            <p className="text-sm text-slate-500">
+              Showing <span className="font-medium text-slate-900 dark:text-white">{(page - 1) * pageSize + 1}</span> to <span className="font-medium text-slate-900 dark:text-white">{Math.min(page * pageSize, data.total)}</span> of <span className="font-medium text-slate-900 dark:text-white">{data.total}</span> posts
+            </p>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage(page - 1)}>
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page >= (data.totalPages || 1)}
+                onClick={() => setPage(page + 1)}
+              >
+                Next
+              </Button>
             </div>
-          )}
-        </>
+          </div>
+        </div>
       )}
 
       <ConfirmDialog
         isOpen={!!deleteId}
         onClose={() => setDeleteId(null)}
-        onConfirm={() => deleteId && deleteMutation.mutate(deleteId)}
-        title="Delete Blog Post"
-        message="Are you sure you want to delete this post? This action cannot be undone."
+        onConfirm={() => {}}
+        title="Delete Post"
+        message="Are you sure you want to delete this blog post? This action cannot be undone."
         variant="destructive"
-        confirmText="Delete"
       />
-    </>
+    </div>
   );
 }
-

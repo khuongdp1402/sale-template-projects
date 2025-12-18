@@ -1,4 +1,3 @@
-import React from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AdminLayout } from './layout/AdminLayout';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';

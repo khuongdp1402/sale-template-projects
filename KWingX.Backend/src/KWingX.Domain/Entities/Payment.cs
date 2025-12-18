@@ -3,7 +3,7 @@ using KWingX.Domain.Enums;
 
 namespace KWingX.Domain.Entities;
 
-public class Payment : BaseEntity, IAggregateRoot
+public class Payment : AuditableEntity, IAggregateRoot
 {
     public Guid OrderId { get; set; }
     public Order Order { get; set; } = null!;

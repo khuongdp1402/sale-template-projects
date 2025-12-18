@@ -3,7 +3,7 @@ using KWingX.Domain.Enums;
 
 namespace KWingX.Domain.Entities;
 
-public class BlogPost : BaseEntity, IAggregateRoot
+public class BlogPost : AuditableEntity, IAggregateRoot
 {
     public string Slug { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;

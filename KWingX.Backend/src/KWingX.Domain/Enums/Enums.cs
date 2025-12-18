@@ -84,7 +84,8 @@ public enum LogType
     Deploy,
     Infra,
     Provision,
-    Webhook
+    Webhook,
+    Contact
 }
 
 public enum LogSeverity
@@ -99,6 +100,13 @@ public enum ContactRequestStatus
     New,
     InProgress,
     Done
+}
+
+public enum TenantStatus
+{
+    Active,
+    Suspended,
+    Inactive
 }
 
 public enum DeploymentStatus

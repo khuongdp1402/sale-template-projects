@@ -14,11 +14,19 @@ public static class AuthorizationPolicies
     public const string DeployOps = "DeployOps";
     public const string LogsView = "LogsView";
     public const string MonitoringView = "MonitoringView";
+    public const string ContactsManage = "ContactsManage";
 
     public static void AddAuthorizationPolicies(this IServiceCollection services)
     {
         services.AddAuthorization(options =>
         {
+            // ContactsManage: SuperAdmin, Admin, Support
+            options.AddPolicy(ContactsManage, policy =>
+                policy.RequireAssertion(context =>
+                    HasRole(context, UserRole.SuperAdmin) ||
+                    HasRole(context, UserRole.Admin) ||
+                    HasRole(context, UserRole.Support)));
+
             // TemplatesWrite: SuperAdmin, Admin, Editor
             options.AddPolicy(TemplatesWrite, policy =>
                 policy.RequireAssertion(context =>

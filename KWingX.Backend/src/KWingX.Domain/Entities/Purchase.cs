@@ -18,7 +18,7 @@ public class Purchase : BaseEntity, IAggregateRoot
     public ICollection<LicenseKey> LicenseKeys { get; set; } = new List<LicenseKey>();
 }
 
-public class LicenseKey : BaseEntity
+public class LicenseKey : AuditableEntity
 {
     public Guid PurchaseId { get; set; }
     public string Key { get; set; } = string.Empty;

@@ -3,7 +3,7 @@ using KWingX.Domain.Enums;
 
 namespace KWingX.Domain.Entities;
 
-public class Order : BaseEntity, IAggregateRoot
+public class Order : AuditableEntity, IAggregateRoot
 {
     public Guid UserId { get; set; }
     public string UserEmail { get; set; } = string.Empty;
@@ -21,8 +21,9 @@ public class OrderItem : BaseEntity
 {
     public Guid OrderId { get; set; }
     public Order Order { get; set; } = null!;
-    public Guid TemplateId { get; set; }
-    public string TemplateName { get; set; } = string.Empty;
+    public Guid? TemplateId { get; set; }
+    public Guid? ServiceId { get; set; }
+    public string ItemName { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public int Quantity { get; set; } = 1;
 }

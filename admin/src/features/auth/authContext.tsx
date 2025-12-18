@@ -1,6 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, LoginCredentials, AuthResponse } from '@/types/api';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { User, LoginCredentials, AuthResponse, Role } from '@/types/api';
 import { apiClient } from '@/lib/apiClient';
+import { env } from '@/config/env';
+import { mockServer } from '@/services/mock/mockServer';
 
 interface AuthContextType {
   user: User | null;
@@ -32,33 +34,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (credentials: LoginCredentials) => {
-    // For development: Always allow fake login
-    // In production, this should be removed and only use real API
-    if (import.meta.env.DEV) {
-      const fakeUser: User = {
-        id: '1',
-        username: credentials.usernameOrEmail || 'admin',
-        email: credentials.usernameOrEmail?.includes('@') 
-          ? credentials.usernameOrEmail 
-          : `${credentials.usernameOrEmail || 'admin'}@kwingx.com`,
-        roles: ['SuperAdmin'],
-        status: 'active',
-        createdAt: new Date().toISOString(),
-      };
-      const fakeToken = 'fake_jwt_token_' + Date.now();
+    if (env.isMock) {
+      const response = await mockServer.login(credentials);
       
-      apiClient.setToken(fakeToken);
-      localStorage.setItem('admin_user', JSON.stringify(fakeUser));
-      setUser(fakeUser);
+      localStorage.setItem('admin_token', response.token);
+      localStorage.setItem('admin_user', JSON.stringify(response.user));
+      setUser(response.user);
       return;
     }
 
-    // Production: Use real API
+    // Real API
     try {
-      const response = await apiClient.post<AuthResponse>('/api/admin/auth/login', credentials);
-      const { token, user: userData } = response.data;
+      const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
+      const { token, user: userData } = response;
       
-      apiClient.setToken(token);
+      localStorage.setItem('admin_token', token);
       localStorage.setItem('admin_user', JSON.stringify(userData));
       setUser(userData);
     } catch (error: any) {
@@ -67,14 +57,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
-    apiClient.clearToken();
+    localStorage.removeItem('admin_token');
+    localStorage.removeItem('admin_user');
     setUser(null);
   };
 
   const refreshUser = async () => {
+    if (env.isMock) return;
+
     try {
-      const response = await apiClient.get<User>('/api/admin/auth/me');
-      const userData = response.data;
+      const userData = await apiClient.get<User>('/auth/me');
       localStorage.setItem('admin_user', JSON.stringify(userData));
       setUser(userData);
     } catch {
@@ -105,4 +97,3 @@ export function useAuth() {
   }
   return context;
 }
-

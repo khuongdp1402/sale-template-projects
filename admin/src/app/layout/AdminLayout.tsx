@@ -1,20 +1,20 @@
-import React, { ReactNode } from 'react';
+import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
+import { RightPanelProvider } from '@/app/panel/RightPanelProvider';
 
-interface AdminLayoutProps {
-  children: ReactNode;
-}
-
-export function AdminLayout({ children }: AdminLayoutProps) {
+export function AdminLayout() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
-      <Sidebar />
-      <div className="lg:pl-64">
-        <Topbar />
-        <main className="p-6">{children}</main>
+    <RightPanelProvider>
+      <div className="min-h-screen bg-slate-50 dark:bg-[#0b1220]">
+        <Sidebar />
+        <div className="lg:pl-64 flex flex-col min-h-screen">
+          <Topbar />
+          <main className="flex-1 p-4 lg:p-8 overflow-y-auto">
+            <Outlet />
+          </main>
+        </div>
       </div>
-    </div>
+    </RightPanelProvider>
   );
 }
-

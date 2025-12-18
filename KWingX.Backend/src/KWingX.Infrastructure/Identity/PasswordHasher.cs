@@ -1,15 +1,15 @@
-using BCrypt.Net;
+using KWingX.Application.Common.Interfaces;
 
 namespace KWingX.Infrastructure.Identity;
 
-public static class PasswordHasher
+public class PasswordHasher : IPasswordHasher
 {
-    public static string HashPassword(string password)
+    public string HashPassword(string password)
     {
         return BCrypt.Net.BCrypt.HashPassword(password);
     }
 
-    public static bool VerifyPassword(string password, string hash)
+    public bool VerifyPassword(string password, string hash)
     {
         return BCrypt.Net.BCrypt.Verify(password, hash);
     }

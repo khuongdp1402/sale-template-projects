@@ -3,7 +3,7 @@ using KWingX.Domain.Enums;
 
 namespace KWingX.Domain.Entities;
 
-public class ContactRequest : BaseEntity, IAggregateRoot
+public class ContactRequest : AuditableEntity, IAggregateRoot
 {
     public string Name { get; set; } = string.Empty;
     public string EmailOrPhone { get; set; } = string.Empty;

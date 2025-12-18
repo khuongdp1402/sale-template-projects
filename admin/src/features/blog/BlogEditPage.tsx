@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
 import { SEO } from '@/lib/seo';
 import { PageHeader } from '@/components/common/PageHeader';

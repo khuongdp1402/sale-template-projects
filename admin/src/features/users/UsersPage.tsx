@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { SEO } from '@/lib/seo';
-import { usersApi } from '@/services/adminApi';
-import { User, PagedResponse, Role } from '@/types/api';
+import { useUsersQuery } from '@/hooks/useUsers';
+import { User } from '@/types/api';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -10,200 +9,148 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/Badge';
 import { formatDate } from '@/lib/format';
 import { EmptyState } from '@/components/common/EmptyState';
-import { Search, Eye } from 'lucide-react';
-
-// Mock data for preview
-const mockUsers: User[] = [
-  {
-    id: '1',
-    username: 'admin',
-    email: 'admin@kwingx.com',
-    phone: '+84 123 456 789',
-    roles: ['SuperAdmin'],
-    status: 'active',
-    createdAt: new Date(Date.now() - 86400000 * 30).toISOString(),
-  },
-  {
-    id: '2',
-    username: 'editor1',
-    email: 'editor@kwingx.com',
-    phone: '+84 987 654 321',
-    roles: ['Editor'],
-    status: 'active',
-    createdAt: new Date(Date.now() - 86400000 * 15).toISOString(),
-  },
-  {
-    id: '3',
-    username: 'support1',
-    email: 'support@kwingx.com',
-    roles: ['Support'],
-    status: 'active',
-    createdAt: new Date(Date.now() - 86400000 * 10).toISOString(),
-  },
-  {
-    id: '4',
-    username: 'finance1',
-    email: 'finance@kwingx.com',
-    roles: ['Finance'],
-    status: 'active',
-    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-  },
-  {
-    id: '5',
-    username: 'user1',
-    email: 'user1@example.com',
-    roles: [],
-    status: 'active',
-    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-  },
-];
+import { Search, Eye, UserPlus, Filter, MoreHorizontal } from 'lucide-react';
+import { Card } from '@/components/ui/Card';
+import { cn } from '@/lib/utils';
+import { useRightPanel } from '@/app/panel/useRightPanel';
 
 export function UsersPage() {
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [page, setPage] = useState(1);
   const pageSize = 10;
+  const { openPanel } = useRightPanel();
 
-  const { data, isLoading } = useQuery<PagedResponse<User>>({
-    queryKey: ['users', page, search, roleFilter, statusFilter],
-    queryFn: async () => {
-      try {
-        return await usersApi.list({
-          page,
-          pageSize,
-          search: search || undefined,
-          role: roleFilter || undefined,
-          status: statusFilter || undefined,
-        });
-      } catch {
-        // Return mock data
-        let filtered = [...mockUsers];
-        if (search) {
-          filtered = filtered.filter(
-            (u) => u.username.includes(search) || u.email.includes(search)
-          );
-        }
-        if (roleFilter) {
-          filtered = filtered.filter((u) => u.roles.includes(roleFilter as Role));
-        }
-        if (statusFilter) {
-          filtered = filtered.filter((u) => u.status === statusFilter.toLowerCase());
-        }
-        return {
-          items: filtered,
-          page,
-          pageSize,
-          total: filtered.length,
-        };
-      }
-    },
+  const { data, isLoading } = useUsersQuery({
+    page,
+    pageSize,
+    search: search || undefined,
+    filters: roleFilter ? { role: roleFilter } : undefined,
   });
 
-  return (
-    <>
-      <SEO title="Users" />
-      <PageHeader title="Users" description="Manage user accounts and roles" />
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setPage(1);
+  };
 
-      {/* Filters */}
-      <div className="mb-6 flex items-center gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input
-            placeholder="Search users..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-            className="pl-10"
-          />
+  return (
+    <div className="space-y-6">
+      <SEO title="Users" />
+      <PageHeader 
+        title="Users" 
+        subtitle="Manage user accounts, roles and permissions"
+        actions={
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => openPanel({ type: 'users', mode: 'create' })}
+          >
+            <UserPlus className="h-4 w-4 mr-2" />
+            Add User
+          </Button>
+        }
+      />
+
+      <Card className="p-4 bg-white/50 dark:bg-[#0f172a]/50 backdrop-blur-sm border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              placeholder="Search by name, email..."
+              value={search}
+              onChange={handleSearch}
+              className="pl-10 bg-white dark:bg-[#1e293b] border-slate-200 dark:border-slate-700"
+            />
+          </div>
+          <div className="flex gap-2">
+            <select
+              value={roleFilter}
+              onChange={(e) => {
+                setRoleFilter(e.target.value);
+                setPage(1);
+              }}
+              className="h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#1e293b] px-3 py-2 text-sm text-slate-700 dark:text-slate-300 outline-none focus:ring-2 focus:ring-blue-500/20"
+            >
+              <option value="">All Roles</option>
+              <option value="SuperAdmin">SuperAdmin</option>
+              <option value="Admin">Admin</option>
+              <option value="Editor">Editor</option>
+              <option value="Support">Support</option>
+            </select>
+            <Button variant="outline" size="icon" className="hidden md:flex">
+              <Filter className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-        <select
-          value={roleFilter}
-          onChange={(e) => {
-            setRoleFilter(e.target.value);
-            setPage(1);
-          }}
-          className="flex h-10 rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-2 text-sm"
-        >
-          <option value="">All Roles</option>
-          <option value="SuperAdmin">SuperAdmin</option>
-          <option value="Admin">Admin</option>
-          <option value="Editor">Editor</option>
-          <option value="Support">Support</option>
-          <option value="Finance">Finance</option>
-          <option value="Ops">Ops</option>
-        </select>
-        <select
-          value={statusFilter}
-          onChange={(e) => {
-            setStatusFilter(e.target.value);
-            setPage(1);
-          }}
-          className="flex h-10 rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-2 text-sm"
-        >
-          <option value="">All Status</option>
-          <option value="active">Active</option>
-          <option value="disabled">Disabled</option>
-        </select>
-      </div>
+      </Card>
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-600 mx-auto"></div>
+        <div className="grid gap-4">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-16 w-full animate-pulse bg-slate-100 dark:bg-slate-800/50 rounded-xl" />
+          ))}
         </div>
       ) : !data || data.items.length === 0 ? (
-        <EmptyState title="No users found" />
+        <EmptyState title="No users found" description="Try adjusting your search or filters." />
       ) : (
-        <>
-          <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div className="space-y-4">
+          <div className="bg-white dark:bg-[#0f172a] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-slate-50 dark:bg-[#1e293b]/50">
                 <TableRow>
-                  <TableHead>Username</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Phone</TableHead>
+                  <TableHead>User</TableHead>
                   <TableHead>Roles</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Created</TableHead>
+                  <TableHead>Joined</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.items.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="font-medium">{user.username}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.phone || '-'}</TableCell>
+                {data.items.map((user: User) => (
+                  <TableRow key={user.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
                     <TableCell>
-                      <div className="flex gap-1 flex-wrap">
-                        {user.roles.length > 0 ? (
-                          user.roles.map((role) => (
-                            <Badge key={role} variant="info">
-                              {role}
-                            </Badge>
-                          ))
-                        ) : (
-                          <span className="text-sm text-slate-500">No roles</span>
-                        )}
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-sm">
+                          {user.username.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-slate-900 dark:text-white leading-none mb-1">{user.username}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={user.status === 'active' ? 'success' : 'default'}>
-                        {user.status}
+                      <div className="flex gap-1.5 flex-wrap">
+                        {user.roles.map((role) => (
+                          <Badge key={role} variant="secondary" className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-none font-medium">
+                            {role}
+                          </Badge>
+                        ))}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={user.isActive ? 'success' : 'default'} className="flex w-fit items-center gap-1.5">
+                        <span className={cn('w-1.5 h-1.5 rounded-full', user.isActive ? 'bg-green-500' : 'bg-slate-400')} />
+                        {user.isActive ? 'Active' : 'Disabled'}
                       </Badge>
                     </TableCell>
-                    <TableCell>{formatDate(user.createdAt)}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setSelectedUser(user)}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
+                    <TableCell className="text-slate-600 dark:text-slate-400 text-sm">
+                      {formatDate(user.createdAt)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-slate-400 hover:text-blue-600"
+                          onClick={() => openPanel({ type: 'users', mode: 'detail', id: user.id })}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -211,86 +158,49 @@ export function UsersPage() {
             </Table>
           </div>
 
-          {/* Pagination */}
-          {(data.totalPages || Math.ceil(data.total / pageSize)) > 1 && (
-            <div className="mt-4 flex items-center justify-between">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Showing {((page - 1) * pageSize) + 1} to {Math.min(page * pageSize, data.total)} of{' '}
-                {data.total} users
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page === 1}
-                  onClick={() => setPage(page - 1)}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page >= (data.totalPages || Math.ceil(data.total / pageSize))}
-                  onClick={() => setPage(page + 1)}
-                >
-                  Next
-                </Button>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2">
+            <p className="text-sm text-slate-500 dark:text-slate-400 order-2 sm:order-1">
+              Showing <span className="font-medium text-slate-900 dark:text-white">{(page - 1) * pageSize + 1}</span> to <span className="font-medium text-slate-900 dark:text-white">{Math.min(page * pageSize, data.total)}</span> of <span className="font-medium text-slate-900 dark:text-white">{data.total}</span> users
+            </p>
+            <div className="flex gap-2 order-1 sm:order-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
+                className="rounded-lg px-4"
+              >
+                Previous
+              </Button>
+              <div className="flex items-center gap-1 px-2">
+                {[...Array(data.totalPages || 1)].map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setPage(i + 1)}
+                    className={cn(
+                      'w-8 h-8 rounded-lg text-sm font-medium transition-colors',
+                      page === i + 1
+                        ? 'bg-blue-600 text-white'
+                        : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'
+                    )}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
               </div>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page >= (data.totalPages || 1)}
+                onClick={() => setPage(page + 1)}
+                className="rounded-lg px-4"
+              >
+                Next
+              </Button>
             </div>
-          )}
-        </>
-      )}
-
-      {/* User Detail Modal */}
-      {selectedUser && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-2xl w-full mx-4">
-            <h2 className="text-xl font-bold mb-4">User Details</h2>
-            <div className="space-y-3">
-              <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Username</p>
-                <p>{selectedUser.username}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Email</p>
-                <p>{selectedUser.email}</p>
-              </div>
-              {selectedUser.phone && (
-                <div>
-                  <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Phone</p>
-                  <p>{selectedUser.phone}</p>
-                </div>
-              )}
-              <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Roles</p>
-                <div className="flex gap-2 mt-1">
-                  {selectedUser.roles.length > 0 ? (
-                    selectedUser.roles.map((role) => (
-                      <Badge key={role} variant="info">
-                        {role}
-                      </Badge>
-                    ))
-                  ) : (
-                    <span className="text-sm text-slate-500">No roles assigned</span>
-                  )}
-                </div>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Status</p>
-                <Badge variant={selectedUser.status === 'active' ? 'success' : 'default'}>
-                  {selectedUser.status}
-                </Badge>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Created</p>
-                <p>{formatDate(selectedUser.createdAt)}</p>
-              </div>
-            </div>
-            <Button className="mt-4" onClick={() => setSelectedUser(null)}>Close</Button>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
-

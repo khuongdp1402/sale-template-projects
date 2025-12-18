@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "gen:api": "openapi-typescript http://localhost:8080/swagger/v1/swagger.json -o src/types/openapi.ts"
   },
   "dependencies": {
     "react": "^18.2.0",

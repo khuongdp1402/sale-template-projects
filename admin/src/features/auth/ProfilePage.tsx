@@ -1,4 +1,3 @@
-import React from 'react';
 import { SEO } from '@/lib/seo';
 import { useAuth } from './authContext';
 import { PageHeader } from '@/components/common/PageHeader';

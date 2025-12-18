@@ -28,6 +28,9 @@ public class UnitOfWork : IUnitOfWork
     private IDeploymentRepository? _deployments;
     private IOrderRepository? _orders;
     private ILandingSectionRepository? _landingSections;
+    private IDeploymentTargetRepository? _deploymentTargets;
+    private ICustomerSiteRepository? _customerSites;
+    private IDeploymentJobRepository? _deploymentJobs;
 
     public UnitOfWork(AppDbContext context, ILoggerFactory loggerFactory)
     {
@@ -73,6 +76,15 @@ public class UnitOfWork : IUnitOfWork
     
     public ILandingSectionRepository LandingSections => 
         _landingSections ??= new LandingSectionRepository(_context, _loggerFactory);
+
+    public IDeploymentTargetRepository DeploymentTargets =>
+        _deploymentTargets ??= new DeploymentTargetRepository(_context, _loggerFactory);
+
+    public ICustomerSiteRepository CustomerSites =>
+        _customerSites ??= new CustomerSiteRepository(_context, _loggerFactory);
+
+    public IDeploymentJobRepository DeploymentJobs =>
+        _deploymentJobs ??= new DeploymentJobRepository(_context, _loggerFactory);
 
     public async Task BeginTransactionAsync()
     {

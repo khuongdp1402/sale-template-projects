@@ -20,6 +20,11 @@ public interface IUnitOfWork : IDisposable
     IOrderRepository Orders { get; }
     ILandingSectionRepository LandingSections { get; }
     
+    // Provisioning
+    IDeploymentTargetRepository DeploymentTargets { get; }
+    ICustomerSiteRepository CustomerSites { get; }
+    IDeploymentJobRepository DeploymentJobs { get; }
+    
     // Transaction methods
     Task BeginTransactionAsync();
     Task CommitAsync();

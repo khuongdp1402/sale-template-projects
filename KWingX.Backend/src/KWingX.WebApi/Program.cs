@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using KWingX.WebApi.Middleware;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +42,7 @@ builder.Services.Configure<PaymentOptions>(builder.Configuration.GetSection("Pay
 builder.Services.Configure<TelegramOptions>(builder.Configuration.GetSection("Telegram"));
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 
 // API Versioning
@@ -110,30 +112,42 @@ builder.Services.AddSwaggerGen(c =>
             new string[] {}
         }
     });
+
+    // Fix schemaId conflict for types with same name in different namespaces (e.g., UserRole entity vs enum)
+    c.CustomSchemaIds(type => type.FullName);
 });
 
 // Authorization Policies
 builder.Services.AddAuthorizationPolicies();
 
 // JWT Auth
+var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JwtOptions>()
+                ?? throw new InvalidOperationException("Jwt configuration section is missing.");
+
+if (string.IsNullOrWhiteSpace(jwtOptions.Key))
+{
+    throw new InvalidOperationException("Jwt:Key is not configured. Set Jwt:Key or environment variable Jwt__Key.");
+}
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        // Use strongly-typed JwtOptions via IOptions
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = AppSettingHelper.Jwt.Issuer,
-            ValidAudience = AppSettingHelper.Jwt.Audience,
+            ValidIssuer = jwtOptions.Issuer,
+            ValidAudience = jwtOptions.Audience,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(string.IsNullOrWhiteSpace(AppSettingHelper.Jwt.Key)
-                    ? throw new InvalidOperationException("Jwt:Key is not configured. Set Jwt:Key or environment variable Jwt__Key.")
-                    : AppSettingHelper.Jwt.Key))
+                Encoding.UTF8.GetBytes(jwtOptions.Key))
         };
     });
+
+// Configure Mapster
+var config = MapsterConfig.GetConfig();
+builder.Services.AddSingleton(config);
 
 var app = builder.Build();
 
@@ -166,20 +180,33 @@ using (var scope = app.Services.CreateScope())
         logger.LogInformation("Database migration completed successfully.");
 
         // Seed data
-        await AppDbContextInitialiser.SeedAsync(context);
+        try 
+        {
+            await AppDbContextInitialiser.SeedAsync(context);
+            logger.LogInformation("Database seeding completed successfully.");
+        }
+        catch (Exception seedEx)
+        {
+            logger.LogError(seedEx, "An error occurred while seeding the database.");
+            // Non-critical, continue
+        }
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "An error occurred while migrating or seeding the database.");
-        // We don't rethrow here to allow the app to start even if DB is down, 
-        // but for a strict requirement we could. 
-        // The prompt says "Fail loudly if connection is invalid", so let's rethrow.
+        logger.LogError(ex, "An error occurred while migrating the database.");
+        // Wait a bit and retry if it's a connection issue? For now just fail
         throw;
     }
 }
 
 app.UseExceptionHandler();
-app.UseHttpsRedirection();
+
+app.UseMiddleware<TenantMiddleware>();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("Development");
 

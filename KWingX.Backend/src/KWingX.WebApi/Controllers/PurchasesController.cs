@@ -1,7 +1,7 @@
+using KWingX.Application.DTOs.Purchases;
 using KWingX.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace KWingX.WebApi.Controllers;
 
@@ -19,41 +19,31 @@ public class PurchasesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult> GetMyPurchases()
+    public async Task<ActionResult<List<PurchaseDto>>> GetMyPurchases()
     {
-        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var purchases = await _purchaseService.GetByUserIdAsync(userId);
+        var purchases = await _purchaseService.GetMyPurchasesAsync();
         return Ok(purchases);
     }
 
-    [HttpPost("templates/{templateId}")]
-    public async Task<ActionResult<Guid>> PurchaseTemplate(Guid templateId)
+    [HttpGet("{purchaseId}/license-key")]
+    public async Task<ActionResult<LicenseKeyDto>> GetLicenseKey(Guid purchaseId)
     {
-        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        try
-        {
-            // TODO: Implement purchase creation logic in service
-            // For now, return placeholder
-            return BadRequest(new { message = "Purchase creation not yet implemented in service" });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var key = await _purchaseService.GetLicenseKeyAsync(purchaseId);
+        if (key == null) return NotFound();
+        return Ok(key);
+    }
+
+    [HttpPost("{purchaseId}/license-key/revoke")]
+    public async Task<ActionResult> RevokeLicenseKey(Guid purchaseId)
+    {
+        await _purchaseService.RevokeLicenseKeyAsync(purchaseId);
+        return NoContent();
     }
 
     [HttpPost("{purchaseId}/license-key/rotate")]
-    public async Task<ActionResult> RotateLicenseKey(Guid purchaseId)
+    public async Task<ActionResult<LicenseKeyDto>> RotateLicenseKey(Guid purchaseId)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        try
-        {
-            var newKey = await _purchaseService.RotateLicenseKeyAsync(purchaseId, userId);
-            return Ok(newKey);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var newKey = await _purchaseService.RotateLicenseKeyAsync(purchaseId);
+        return Ok(newKey);
     }
 }

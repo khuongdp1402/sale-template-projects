@@ -1,7 +1,6 @@
 using KWingX.Application.Common.Models;
 using KWingX.Application.Interfaces.Repositories;
 using KWingX.Domain.Entities;
-using KWingX.Domain.Enums;
 using KWingX.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,6 +11,30 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 {
     public UserRepository(AppDbContext context, ILoggerFactory loggerFactory) 
         : base(context, loggerFactory) { }
+
+    public async Task<User?> GetByUsernameWithRolesAsync(string username)
+    {
+        return await _dbSet
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .FirstOrDefaultAsync(u => u.Username == username);
+    }
+
+    public async Task<User?> GetByEmailWithRolesAsync(string email)
+    {
+        return await _dbSet
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .FirstOrDefaultAsync(u => u.Email == email);
+    }
+
+    public async Task<User?> GetByIdWithRolesAsync(Guid id)
+    {
+        return await _dbSet
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .FirstOrDefaultAsync(u => u.Id == id);
+    }
 
     public async Task<User?> GetByUsernameAsync(string username, bool includeDeleted = false)
     {
@@ -45,8 +68,8 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         
         if (role.HasValue)
         {
-            var roleString = role.Value.ToString();
-            query = query.Where(u => u.RolesCsv.Contains(roleString));
+            var roleName = role.Value.ToString();
+            query = query.Where(u => u.UserRoles.Any(ur => ur.Role.Name == roleName));
         }
         
         if (isActive.HasValue)
@@ -54,6 +77,8 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         
         var total = await query.CountAsync();
         var items = await query
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
             .OrderByDescending(u => u.Id)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
@@ -69,4 +94,3 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         };
     }
 }
-

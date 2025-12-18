@@ -1,22 +1,26 @@
 import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import { env } from '../config/env';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
-
+/**
+ * Base ApiClient using Axios.
+ * Configured with base URL, versioning, and auth interceptors.
+ */
 class ApiClient {
   private client: AxiosInstance;
 
   constructor() {
     this.client = axios.create({
-      baseURL: API_BASE_URL,
+      baseURL: env.adminApiBase,
+      timeout: env.timeout,
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
-    // Request interceptor: attach token
+    // Request interceptor: attach token from localStorage
     this.client.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        const token = this.getToken();
+        const token = localStorage.getItem('admin_token');
         if (token && config.headers) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -25,7 +29,7 @@ class ApiClient {
       (error) => Promise.reject(error)
     );
 
-    // Response interceptor: handle 401
+    // Response interceptor: handle global errors like 401
     this.client.interceptors.response.use(
       (response) => response,
       (error: AxiosError) => {
@@ -37,45 +41,34 @@ class ApiClient {
     );
   }
 
-  private getToken(): string | null {
-    return localStorage.getItem('admin_token');
-  }
-
   private handleUnauthorized(): void {
     localStorage.removeItem('admin_token');
     localStorage.removeItem('admin_user');
-    window.location.href = '/admin/login';
+    if (window.location.pathname !== '/admin/login') {
+      window.location.href = '/admin/login';
+    }
   }
 
-  setToken(token: string): void {
-    localStorage.setItem('admin_token', token);
+  // Simplified HTTP methods
+  async get<T = any>(url: string, params?: any) {
+    const response = await this.client.get<T>(url, { params });
+    return response.data;
   }
 
-  clearToken(): void {
-    localStorage.removeItem('admin_token');
-    localStorage.removeItem('admin_user');
+  async post<T = any>(url: string, data?: any) {
+    const response = await this.client.post<T>(url, data);
+    return response.data;
   }
 
-  get<T = any>(url: string, config?: any) {
-    return this.client.get<T>(url, config);
+  async put<T = any>(url: string, data?: any) {
+    const response = await this.client.put<T>(url, data);
+    return response.data;
   }
 
-  post<T = any>(url: string, data?: any, config?: any) {
-    return this.client.post<T>(url, data, config);
-  }
-
-  put<T = any>(url: string, data?: any, config?: any) {
-    return this.client.put<T>(url, data, config);
-  }
-
-  patch<T = any>(url: string, data?: any, config?: any) {
-    return this.client.patch<T>(url, data, config);
-  }
-
-  delete<T = any>(url: string, config?: any) {
-    return this.client.delete<T>(url, config);
+  async delete<T = any>(url: string) {
+    const response = await this.client.delete<T>(url);
+    return response.data;
   }
 }
 
 export const apiClient = new ApiClient();
-

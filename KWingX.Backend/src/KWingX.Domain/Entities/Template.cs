@@ -3,7 +3,7 @@ using KWingX.Domain.Enums;
 
 namespace KWingX.Domain.Entities;
 
-public class Template : BaseEntity, IAggregateRoot
+public class Template : AuditableEntity, IAggregateRoot
 {
     public string Slug { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
@@ -35,6 +35,7 @@ public class TemplateCategory : BaseEntity
 {
     public string Name { get; set; } = string.Empty;
     public string Slug { get; set; } = string.Empty;
+    public bool IsActive { get; set; } = true;
     public ICollection<Template> Templates { get; set; } = new List<Template>();
 }
 
@@ -42,6 +43,7 @@ public class TemplateTag : BaseEntity
 {
     public string Name { get; set; } = string.Empty;
     public string Color { get; set; } = string.Empty;
+    public bool IsActive { get; set; } = true;
     public ICollection<Template> Templates { get; set; } = new List<Template>();
 }
 

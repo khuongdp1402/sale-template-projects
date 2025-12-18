@@ -27,6 +27,13 @@ public class PurchaseRepository : BaseRepository<Purchase>, IPurchaseRepository
             .ToListAsync();
     }
 
+    public async Task<Purchase?> GetByIdWithLicenseKeysAsync(Guid id)
+    {
+        return await _dbSet
+            .Include(p => p.LicenseKeys)
+            .FirstOrDefaultAsync(p => p.Id == id);
+    }
+
     public override async Task<Purchase?> GetByIdAsync(Guid id, bool includeDeleted = false)
     {
         var query = _dbSet

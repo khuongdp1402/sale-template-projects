@@ -2,15 +2,19 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
+# Copy solution file
+COPY ["KWingX.sln", "./"]
+
 # Copy csproj files and restore dependencies
 COPY ["src/KWingX.WebApi/KWingX.WebApi.csproj", "src/KWingX.WebApi/"]
 COPY ["src/KWingX.Application/KWingX.Application.csproj", "src/KWingX.Application/"]
 COPY ["src/KWingX.Domain/KWingX.Domain.csproj", "src/KWingX.Domain/"]
 COPY ["src/KWingX.Infrastructure/KWingX.Infrastructure.csproj", "src/KWingX.Infrastructure/"]
-RUN dotnet restore "src/KWingX.WebApi/KWingX.WebApi.csproj"
+
+RUN dotnet restore "KWingX.sln"
 
 # Copy the rest of the source code
-COPY . .
+COPY src/ ./src/
 WORKDIR "/src/src/KWingX.WebApi"
 RUN dotnet build "KWingX.WebApi.csproj" -c Release -o /app/build
 
@@ -21,5 +25,6 @@ RUN dotnet publish "KWingX.WebApi.csproj" -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:8080
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "KWingX.WebApi.dll"]

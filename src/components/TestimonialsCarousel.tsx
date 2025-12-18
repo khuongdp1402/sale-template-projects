@@ -60,8 +60,8 @@ const starIcons = (rating: number) =>
 
 const cardVariants = {
   initial: { opacity: 0, y: 16 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
-  exit: { opacity: 0, y: -12, transition: { duration: 0.25, ease: 'easeIn' } }
+  animate: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] as const } },
+  exit: { opacity: 0, y: -12, transition: { duration: 0.25, ease: [0.4, 0, 1, 1] as const } }
 };
 
 const TestimonialsCarousel: React.FC = () => {

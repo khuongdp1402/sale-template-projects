@@ -1,4 +1,3 @@
-using KWingX.Application.Common.Interfaces.Repositories;
 using KWingX.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

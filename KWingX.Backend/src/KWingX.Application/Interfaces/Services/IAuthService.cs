@@ -1,11 +1,12 @@
-namespace KWingX.Application.Interfaces.Services;
+using KWingX.Application.DTOs.Auth;
 
-public record AuthResponseDto(string Token, string Username, string Email);
+namespace KWingX.Application.Interfaces.Services;
 
 public interface IAuthService
 {
-    Task<AuthResponseDto> LoginAsync(string usernameOrEmail, string password);
-    Task<AuthResponseDto> RegisterAsync(string username, string email, string password, string confirmPassword);
+    Task<AuthResponse> LoginAsync(LoginRequest request);
+    Task<AuthResponse> RegisterAsync(RegisterRequest request);
+    Task<UserDto> GetMeAsync();
+    Task UpdateProfileAsync(UpdateProfileRequest request);
+    Task ChangePasswordAsync(ChangePasswordRequest request);
 }
-
-

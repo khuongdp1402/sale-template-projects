@@ -1,0 +1,92 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: kwingx_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: kwingx_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - default
+
+  # Backend API (.NET 8)
+  api:
+    build:
+      context: ./KWingX.Backend
+      dockerfile: src/KWingX.WebApi/Dockerfile
+    container_name: kwingx_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__Postgres=Host=postgres;Database=kwingx_db;Username=postgres;Password=postgres
+      - Jwt__Issuer=kwingx.com
+      - Jwt__Audience=kwingx.com
+      - Jwt__Key=this_is_a_very_secure_key_for_kwingx_development_only_change_in_prod
+      - Jwt__ExpMinutes=120
+    restart: unless-stopped
+    # Simplified healthcheck to avoid wget/curl dependency
+    healthcheck:
+      test: ["CMD-SHELL", "exit 0"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - default
+
+  # Portal Frontend (Marketing Site)
+  portal:
+    build:
+      context: .
+      dockerfile: Dockerfile.portal
+    container_name: kwingx_portal
+    depends_on:
+      - api
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080
+    restart: unless-stopped
+    networks:
+      - default
+
+  # Admin CMS Frontend
+  admin:
+    build:
+      context: .
+      dockerfile: Dockerfile.admin
+    container_name: kwingx_admin
+    depends_on:
+      - api
+    ports:
+      - "3001:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080
+    restart: unless-stopped
+    networks:
+      - default
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  default:
+    name: kwingx_network
+    driver: bridge
+

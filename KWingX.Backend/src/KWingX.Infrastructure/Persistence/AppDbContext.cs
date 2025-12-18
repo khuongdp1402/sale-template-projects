@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     public DbSet<User> Users => Set<User>();
+    public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserRole> UserRoles => Set<UserRole>();
     
     // Marketplace
@@ -39,6 +40,12 @@ public class AppDbContext : DbContext
     public DbSet<ContactRequest> ContactRequests => Set<ContactRequest>();
     public DbSet<Log> Logs => Set<Log>();
     public DbSet<Deployment> Deployments => Set<Deployment>();
+    public DbSet<Tenant> Tenants => Set<Tenant>();
+
+    // Provisioning
+    public DbSet<DeploymentTarget> DeploymentTargets => Set<DeploymentTarget>();
+    public DbSet<CustomerSite> CustomerSites => Set<CustomerSite>();
+    public DbSet<DeploymentJob> DeploymentJobs => Set<DeploymentJob>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -49,14 +56,30 @@ public class AppDbContext : DbContext
         ApplySoftDeleteQueryFilters(builder);
         
         // Basic configurations if not using separate files
-        builder.Entity<User>().HasIndex(u => u.Username).IsUnique();
-        builder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+        builder.Entity<Tenant>().HasIndex(t => t.Code).IsUnique();
+        builder.Entity<Tenant>().HasIndex(t => t.Subdomain).IsUnique();
+        builder.Entity<Tenant>().HasIndex(t => t.CustomDomain).IsUnique();
+
+        builder.Entity<UserRole>()
+            .HasKey(ur => new { ur.UserId, ur.RoleId });
+
+        builder.Entity<UserRole>()
+            .HasOne(ur => ur.User)
+            .WithMany(u => u.UserRoles)
+            .HasForeignKey(ur => ur.UserId);
+
+        builder.Entity<UserRole>()
+            .HasOne(ur => ur.Role)
+            .WithMany(r => r.UserRoles)
+            .HasForeignKey(ur => ur.RoleId);
         
         builder.Entity<Template>().HasIndex(t => t.Slug).IsUnique();
         builder.Entity<TemplateCategory>().HasIndex(c => c.Slug).IsUnique();
-        
+        builder.Entity<TemplateTag>().HasIndex(t => t.Name).IsUnique();
         builder.Entity<Service>().HasIndex(s => s.Slug).IsUnique();
         builder.Entity<BlogPost>().HasIndex(b => b.Slug).IsUnique();
+        
+        builder.Entity<User>().HasIndex(u => u.Username).IsUnique();
         
         // Indexes for performance
         builder.Entity<Log>().HasIndex(l => new { l.Type, l.CreatedAt });

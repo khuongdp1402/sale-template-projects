@@ -1,4 +1,6 @@
+using KWingX.Application.DTOs.Auth;
 using KWingX.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KWingX.WebApi.Controllers;
@@ -16,30 +18,42 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult> Login([FromBody] string usernameOrEmail, [FromBody] string password)
+    [AllowAnonymous]
+    public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
     {
-        try
-        {
-            var result = await _authService.LoginAsync(usernameOrEmail, password);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _authService.LoginAsync(request);
+        return Ok(result);
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult> Register(string username, string email, string password, string confirmPassword)
+    [AllowAnonymous]
+    public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request)
     {
-        try
-        {
-            var result = await _authService.RegisterAsync(username, email, password, confirmPassword);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _authService.RegisterAsync(request);
+        return Ok(result);
+    }
+
+    [HttpGet("me")]
+    [Authorize]
+    public async Task<ActionResult<UserDto>> GetMe()
+    {
+        var result = await _authService.GetMeAsync();
+        return Ok(result);
+    }
+
+    [HttpPut("profile")]
+    [Authorize]
+    public async Task<ActionResult> UpdateProfile(UpdateProfileRequest request)
+    {
+        await _authService.UpdateProfileAsync(request);
+        return NoContent();
+    }
+
+    [HttpPut("change-password")]
+    [Authorize]
+    public async Task<ActionResult> ChangePassword(ChangePasswordRequest request)
+    {
+        await _authService.ChangePasswordAsync(request);
+        return NoContent();
     }
 }

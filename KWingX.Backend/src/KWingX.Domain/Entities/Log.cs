@@ -3,7 +3,7 @@ using KWingX.Domain.Enums;
 
 namespace KWingX.Domain.Entities;
 
-public class Log : BaseEntity, IAggregateRoot
+public class Log : AuditableEntity, IAggregateRoot
 {
     public LogType Type { get; set; }
     public LogSeverity Severity { get; set; } = LogSeverity.Info;

@@ -5,6 +5,9 @@ namespace KWingX.Application.Interfaces.Repositories;
 
 public interface IUserRepository : IRepository<User>
 {
+    Task<User?> GetByUsernameWithRolesAsync(string username);
+    Task<User?> GetByEmailWithRolesAsync(string email);
+    Task<User?> GetByIdWithRolesAsync(Guid id);
     Task<User?> GetByUsernameAsync(string username, bool includeDeleted = false);
     Task<User?> GetByEmailAsync(string email, bool includeDeleted = false);
     Task<PagedResponse<User>> GetAdminListAsync(

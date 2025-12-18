@@ -1,8 +1,8 @@
-import React from 'react';
 import { HealthCheck, MonitoringStatus } from '@/types/api';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
-import { CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle2, XCircle, ShieldCheck, Activity, Terminal } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface SystemStatusProps {
   health: HealthCheck[];
@@ -11,66 +11,68 @@ interface SystemStatusProps {
 
 export function SystemStatus({ health, monitoring }: SystemStatusProps) {
   return (
-    <Card>
-      <div className="p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-          System Status
-        </h3>
-        <div className="space-y-3">
-          {health.length > 0 ? (
-            health.map((check) => (
-              <div key={check.service} className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {check.status === 'healthy' ? (
-                    <CheckCircle2 className="h-5 w-5 text-green-500" />
-                  ) : (
-                    <XCircle className="h-5 w-5 text-red-500" />
-                  )}
-                  <span className="text-sm font-medium text-slate-900 dark:text-white">
-                    {check.service}
-                  </span>
-                </div>
-                <Badge variant={check.status === 'healthy' ? 'success' : 'error'}>
-                  {check.status}
-                </Badge>
+    <Card className="flex flex-col h-full border-slate-200 dark:border-slate-800">
+      <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2">
+        <ShieldCheck className="h-4 w-4 text-green-500" />
+        <h3 className="font-semibold text-slate-900 dark:text-white text-sm">System Health</h3>
+      </div>
+      
+      <div className="p-4 space-y-4">
+        {/* Main Services */}
+        <div className="space-y-2">
+          {health.map((check) => (
+            <div key={check.service} className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-[#1e293b]/50 border border-transparent dark:border-slate-800/50">
+              <div className="flex items-center gap-3">
+                {check.status === 'healthy' ? (
+                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                ) : (
+                  <XCircle className="h-4 w-4 text-red-500" />
+                )}
+                <span className="text-xs font-medium text-slate-700 dark:text-slate-300 truncate">
+                  {check.service}
+                </span>
               </div>
-            ))
-          ) : (
-            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-              <AlertCircle className="h-5 w-5" />
-              <span className="text-sm">No health data available</span>
+              <Badge 
+                variant={check.status === 'healthy' ? 'success' : 'destructive'} 
+                className="text-[9px] px-1.5 py-0 min-w-[50px] justify-center h-5"
+              >
+                {check.status === 'healthy' ? 'Online' : 'Offline'}
+              </Badge>
             </div>
-          )}
-
-          {monitoring && (
-            <>
-              <div className="pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
-                <p className="text-sm font-medium text-slate-900 dark:text-white mb-2">Webhooks</p>
-                <div className="text-sm text-slate-600 dark:text-slate-400">
-                  Active: {monitoring.webhooks.active} / {monitoring.webhooks.total}
-                  {monitoring.webhooks.failed > 0 && (
-                    <span className="text-red-600 dark:text-red-400 ml-2">
-                      ({monitoring.webhooks.failed} failed)
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="pt-2">
-                <p className="text-sm font-medium text-slate-900 dark:text-white mb-2">Background Jobs</p>
-                <div className="text-sm text-slate-600 dark:text-slate-400">
-                  Running: {monitoring.jobs.running} / {monitoring.jobs.total}
-                  {monitoring.jobs.failed > 0 && (
-                    <span className="text-red-600 dark:text-red-400 ml-2">
-                      ({monitoring.jobs.failed} failed)
-                    </span>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
+          ))}
         </div>
+
+        {/* Sub-monitoring stats */}
+        {monitoring && (
+          <div className="grid grid-cols-2 gap-3 pt-2">
+            <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#1e293b]/50 border border-slate-100 dark:border-slate-800/50">
+              <div className="flex items-center gap-2 mb-2">
+                <Activity className="h-3 w-3 text-blue-500" />
+                <span className="text-[10px] font-bold text-slate-500 uppercase">Jobs</span>
+              </div>
+              <div className="flex items-end justify-between">
+                <p className="text-lg font-bold text-slate-900 dark:text-white leading-none">{monitoring.jobs.running}</p>
+                <span className="text-[10px] text-slate-400">of {monitoring.jobs.total}</span>
+              </div>
+            </div>
+            <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#1e293b]/50 border border-slate-100 dark:border-slate-800/50">
+              <div className="flex items-center gap-2 mb-2">
+                <Terminal className="h-3 w-3 text-purple-500" />
+                <span className="text-[10px] font-bold text-slate-500 uppercase">Hooks</span>
+              </div>
+              <div className="flex items-end justify-between">
+                <p className="text-lg font-bold text-slate-900 dark:text-white leading-none">{monitoring.webhooks.active}</p>
+                <span className={cn(
+                  "text-[10px]",
+                  monitoring.webhooks.failed > 0 ? "text-red-500 font-bold" : "text-slate-400"
+                )}>
+                  {monitoring.webhooks.failed} fail
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </Card>
   );
 }
-

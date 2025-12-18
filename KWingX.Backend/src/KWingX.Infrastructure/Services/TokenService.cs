@@ -16,7 +16,7 @@ public class TokenService : ITokenService
         _config = config;
     }
 
-    public string CreateToken(Guid userId, string username, string email)
+    public string CreateToken(Guid userId, string username, string email, List<string> roles)
     {
         var claims = new List<Claim>
         {
@@ -25,6 +25,11 @@ public class TokenService : ITokenService
             new Claim(JwtRegisteredClaimNames.Email, email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
+
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"] ?? "super_secret_key_must_be_long_enough_for_hs256"));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

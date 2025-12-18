@@ -4,10 +4,11 @@ using KWingX.Application.Interfaces.Repositories;
 using KWingX.Infrastructure.Persistence;
 using KWingX.Infrastructure.Repositories;
 using KWingX.Infrastructure.Services;
+using KWingX.Infrastructure.Identity;
+using KWingX.Infrastructure.Services.Provisioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace KWingX.Infrastructure;
 
@@ -16,10 +17,19 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<AppDbContext>(options =>
+        {
+            var connectionString = configuration.GetConnectionString("Postgres");
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                // Fallback for local development if environment variable is not set
+                connectionString = "Host=localhost;Port=5435;Database=kwingx_db;Username=postgres;Password=postgres";
+            }
+
             options.UseNpgsql(
-                configuration.GetConnectionString("Postgres") ?? "Host=localhost;Database=kwingx_db;Username=postgres;Password=postgres",
+                connectionString,
                 b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName))
-                .AddInterceptors(new SoftDeleteSaveChangesInterceptor()));
+                .AddInterceptors(new SoftDeleteSaveChangesInterceptor());
+        });
 
         // Register generic repository
         services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
@@ -38,12 +48,17 @@ public static class DependencyInjection
         services.AddScoped<ILogRepository, LogRepository>();
         services.AddScoped<IDeploymentRepository, DeploymentRepository>();
         services.AddScoped<ILandingSectionRepository, LandingSectionRepository>();
+        services.AddScoped<ITenantRepository, TenantRepository>();
+        services.AddScoped<ITemplateCategoryRepository, TemplateCategoryRepository>();
+        services.AddScoped<ITemplateTagRepository, TemplateTagRepository>();
+        services.AddScoped<IServiceRepository, ServiceRepository>();
         
-        // Register old repositories for backward compatibility (can be removed later)
-        services.AddScoped<KWingX.Application.Common.Interfaces.Repositories.ITemplateRepositoryExtended, TemplateRepositoryExtended>();
-
         services.AddTransient<ITokenService, TokenService>();
         services.AddTransient<IKeyGeneratorService, KeyGeneratorService>();
+        services.AddScoped<ITenantResolver, TenantResolver>();
+        services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
+        services.AddHostedService<DeploymentWorker>();
 
         return services;
     }

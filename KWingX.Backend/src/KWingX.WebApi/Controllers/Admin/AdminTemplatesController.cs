@@ -1,7 +1,8 @@
 using KWingX.Application.Common.Models;
-using KWingX.Application.Features.Templates.DTOs;
+using KWingX.Application.DTOs.Templates;
+using KWingX.Application.Interfaces.Services;
+using KWingX.Domain.Enums;
 using KWingX.WebApi.Authorization;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,78 +11,99 @@ namespace KWingX.WebApi.Controllers.Admin;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/admin/templates")]
-[Authorize]
 [Authorize(Policy = AuthorizationPolicies.TemplatesWrite)]
 [Tags("Admin - Templates")]
 public class AdminTemplatesController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    private readonly ITemplateService _templateService;
 
-    public AdminTemplatesController(IMediator mediator)
+    public AdminTemplatesController(ITemplateService templateService)
     {
-        _mediator = mediator;
+        _templateService = templateService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<PagedResponse<TemplateListItemDto>>> GetList(
+    public async Task<ActionResult<PagedResponse<TemplateDto>>> GetList(
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10,
         [FromQuery] string? search = null,
         [FromQuery] string? category = null,
-        [FromQuery] string? type = null,
-        [FromQuery] string? audience = null,
-        [FromQuery] string? status = null)
+        [FromQuery] TemplateType? type = null,
+        [FromQuery] Audience? audience = null,
+        [FromQuery] TemplateStatus? status = null)
     {
-        // TODO: Implement GetAdminTemplatesListQuery
-        return Ok(new PagedResponse<TemplateListItemDto>
-        {
-            Page = page,
-            PageSize = pageSize,
-            Total = 0,
-            Items = new List<TemplateListItemDto>()
-        });
+        var result = await _templateService.GetAdminTemplatesAsync(page, pageSize, search, category, type, audience, status);
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<TemplateDetailDto>> GetById(Guid id)
+    public async Task<ActionResult<TemplateDto>> GetById(Guid id)
     {
-        // TODO: Implement GetAdminTemplateByIdQuery
-        return NotFound();
+        var result = await _templateService.GetTemplateByIdAsync(id);
+        if (result == null) return NotFound();
+        return Ok(result);
     }
 
     [HttpPost]
-    public async Task<ActionResult<TemplateDetailDto>> Create([FromBody] object createCommand)
+    public async Task<ActionResult<TemplateDto>> Create([FromBody] CreateTemplateRequest request)
     {
-        // TODO: Implement CreateTemplateCommand
-        return BadRequest("Not implemented yet");
+        var result = await _templateService.CreateTemplateAsync(request);
+        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<TemplateDetailDto>> Update(Guid id, [FromBody] object updateCommand)
+    public async Task<ActionResult> Update(Guid id, [FromBody] CreateTemplateRequest request)
     {
-        // TODO: Implement UpdateTemplateCommand
-        return BadRequest("Not implemented yet");
+        await _templateService.UpdateTemplateAsync(id, request);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(Guid id)
     {
-        // TODO: Implement DeleteTemplateCommand
-        return BadRequest("Not implemented yet");
+        await _templateService.DeleteTemplateAsync(id);
+        return NoContent();
     }
 
     [HttpPost("{id}/publish")]
     public async Task<ActionResult> Publish(Guid id)
     {
-        // TODO: Implement PublishTemplateCommand
-        return BadRequest("Not implemented yet");
+        await _templateService.PublishTemplateAsync(id);
+        return NoContent();
     }
 
     [HttpPost("{id}/unpublish")]
     public async Task<ActionResult> Unpublish(Guid id)
     {
-        // TODO: Implement UnpublishTemplateCommand
-        return BadRequest("Not implemented yet");
+        await _templateService.UnpublishTemplateAsync(id);
+        return NoContent();
+    }
+
+    [HttpPut("{id}/media")]
+    public async Task<ActionResult> UpdateMedia(Guid id, [FromBody] List<TemplateMediaDto> media)
+    {
+        await _templateService.UpdateTemplateMediaAsync(id, media);
+        return NoContent();
+    }
+
+    [HttpPut("{id}/customers")]
+    public async Task<ActionResult> UpdateCustomers(Guid id, [FromBody] List<CustomerUseCaseDto> customers)
+    {
+        await _templateService.UpdateTemplateCustomersAsync(id, customers);
+        return NoContent();
+    }
+
+    [HttpPut("{id}/similar")]
+    public async Task<ActionResult> UpdateSimilar(Guid id, [FromBody] List<Guid> similarIds)
+    {
+        await _templateService.UpdateSimilarTemplatesAsync(id, similarIds);
+        return NoContent();
+    }
+
+    [HttpPost("{id}/restore")]
+    public async Task<ActionResult> Restore(Guid id)
+    {
+        await _templateService.RestoreTemplateAsync(id);
+        return NoContent();
     }
 }
-

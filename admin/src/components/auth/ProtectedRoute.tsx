@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth/authContext';
 import { Role } from '@/types/api';
@@ -41,7 +41,7 @@ export function ProtectedRoute({ children, requiredRoles, permission }: Protecte
   }
 
   // Check permission-based access
-  if (permission && !hasPermission(user.roles, PERMISSIONS[permission])) {
+  if (permission && !hasPermission(user.roles, [...PERMISSIONS[permission]])) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">

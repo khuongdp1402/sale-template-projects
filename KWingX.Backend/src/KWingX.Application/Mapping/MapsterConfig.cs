@@ -1,5 +1,6 @@
 using KWingX.Application.DTOs.Templates;
-using KWingX.Application.Features.Templates.DTOs;
+using KWingX.Application.DTOs.Orders;
+using KWingX.Application.DTOs.Purchases;
 using KWingX.Domain.Entities;
 using Mapster;
 
@@ -13,26 +14,27 @@ public static class MapsterConfig
 
         // Template mappings
         config.NewConfig<Template, TemplateListItemDto>()
-            .Map(dest => dest.Tags, src => src.Tags.Select(t => t.Name))
-            .Map(dest => dest.Categories, src => src.Categories.Select(c => c.Name))
-            .Map(dest => dest.CardMedia, src => src.Media.Where(m => m.Thumb != null).Select(m => m.Thumb!));
+            .Map(dest => dest.MainImage, src => src.Media != null && src.Media.Any() 
+                ? src.Media.OrderBy(m => m.SortOrder).FirstOrDefault().Src 
+                : string.Empty);
 
-        config.NewConfig<Template, TemplateDetailDto>()
-            .Map(dest => dest.Features,
-                src => string.IsNullOrEmpty(src.FeaturesCsv)
-                    ? new List<string>()
-                    : src.FeaturesCsv.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(f => f.Trim()))
-            .Map(dest => dest.Gallery,
-                src => src.Media.Select(m => new GalleryItemDto
-                {
-                    Type = m.MediaType.ToString().ToLower(),
-                    Src = m.Src,
-                    Thumb = m.Thumb,
-                    Title = m.Title
-                }))
-            .Map(dest => dest.SimilarTemplateIds, src => src.SimilarTemplates.Select(t => t.Id));
+        config.NewConfig<Template, TemplateDto>()
+            .Map(dest => dest.Media, src => src.Media)
+            .Map(dest => dest.CustomerUseCases, src => src.CustomerUseCases)
+            .Map(dest => dest.Categories, src => src.Categories)
+            .Map(dest => dest.Tags, src => src.Tags);
 
-        // TODO: Add mappings for Blog, Users, Orders, etc.
+        // Order mappings
+        config.NewConfig<Order, OrderDto>()
+            .Map(dest => dest.Items, src => src.Items);
+
+        config.NewConfig<OrderItem, OrderItemDto>()
+            .Map(dest => dest.ItemName, src => src.ItemName);
+
+        // Purchase mappings
+        config.NewConfig<Purchase, PurchaseDto>()
+            .Map(dest => dest.TemplateName, src => src.TemplateId.HasValue ? "Template" : null) // Placeholder
+            .Map(dest => dest.ServiceName, src => src.ServiceId.HasValue ? "Service" : null); // Placeholder
 
         // Compile for faster runtime and early failure
         config.Compile();
@@ -40,5 +42,3 @@ public static class MapsterConfig
         return config;
     }
 }
-
-

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -60,7 +60,6 @@ export function TemplateEditPage() {
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
   } = useForm<TemplateFormData>({
     resolver: zodResolver(templateSchema),
     defaultValues: {

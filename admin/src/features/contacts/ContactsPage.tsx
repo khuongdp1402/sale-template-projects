@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { SEO } from '@/lib/seo';
-import { contactsApi } from '@/services/adminApi';
-import { Contact, PagedResponse } from '@/types/api';
+import { useContactsQuery } from '@/hooks/adminHooks';
+import { Contact } from '@/types/api';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -10,132 +9,137 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/Badge';
 import { formatDate } from '@/lib/format';
 import { EmptyState } from '@/components/common/EmptyState';
-import { Search, Eye } from 'lucide-react';
+import { Search, Eye, Filter, Mail, Phone, MessageSquare, MoreHorizontal } from 'lucide-react';
+import { Card } from '@/components/ui/Card';
+import { useRightPanel } from '@/app/panel/useRightPanel';
 
 export function ContactsPage() {
-  const queryClient = useQueryClient();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const pageSize = 10;
+  const { openPanel } = useRightPanel();
 
-  const { data, isLoading } = useQuery<PagedResponse<Contact>>({
-    queryKey: ['contacts', page, search, statusFilter],
-    queryFn: () =>
-      contactsApi.list({
-        page,
-        pageSize,
-        search: search || undefined,
-        status: statusFilter || undefined,
-      }),
-  });
-
-  const updateStatusMutation = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: string }) =>
-      contactsApi.updateStatus(id, status),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['contacts'] });
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-    },
+  const { data, isLoading } = useContactsQuery({
+    page,
+    pageSize,
+    search: search || undefined,
+    filters: { status: statusFilter || undefined },
   });
 
   return (
-    <>
+    <div className="space-y-6">
       <SEO title="Contacts" />
-      <PageHeader title="Contact Requests" description="Manage leads and contact submissions" />
+      <PageHeader 
+        title="Contact Requests" 
+        subtitle="Manage customer inquiries and service leads"
+      />
 
-      {/* Filters */}
-      <div className="mb-6 flex items-center gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input
-            placeholder="Search contacts..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-            className="pl-10"
-          />
+      <Card className="p-4 bg-white/50 dark:bg-[#0f172a]/50 backdrop-blur-sm border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              placeholder="Search by name, email or message..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
+              className="pl-10 bg-white dark:bg-[#1e293b] border-slate-200 dark:border-slate-700"
+            />
+          </div>
+          <div className="flex gap-2">
+            <select
+              value={statusFilter}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setPage(1);
+              }}
+              className="h-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#1e293b] px-3 py-2 text-sm outline-none"
+            >
+              <option value="">All Status</option>
+              <option value="New">New</option>
+              <option value="InProgress">In Progress</option>
+              <option value="Done">Done</option>
+            </select>
+            <Button variant="outline" size="icon">
+              <Filter className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-        <select
-          value={statusFilter}
-          onChange={(e) => {
-            setStatusFilter(e.target.value);
-            setPage(1);
-          }}
-          className="flex h-10 rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-2 text-sm"
-        >
-          <option value="">All Status</option>
-          <option value="New">New</option>
-          <option value="InProgress">In Progress</option>
-          <option value="Done">Done</option>
-        </select>
-      </div>
+      </Card>
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-600 mx-auto"></div>
+        <div className="grid gap-4">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-16 w-full animate-pulse bg-slate-100 dark:bg-slate-800/50 rounded-xl" />
+          ))}
         </div>
       ) : !data || data.items.length === 0 ? (
-        <EmptyState title="No contact requests found" />
+        <EmptyState 
+          title="No contacts found" 
+          description="Inquiries from the marketing site will appear here."
+          icon={<MessageSquare className="h-12 w-12 text-slate-300" />}
+        />
       ) : (
-        <>
-          <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div className="space-y-4">
+          <div className="bg-white dark:bg-[#0f172a] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-slate-50 dark:bg-[#1e293b]/50">
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email/Phone</TableHead>
-                  <TableHead>Source</TableHead>
+                  <TableHead>Contact</TableHead>
+                  <TableHead>Message Preview</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Created</TableHead>
+                  <TableHead>Source</TableHead>
+                  <TableHead>Date</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.items.map((contact) => (
-                  <TableRow key={contact.id}>
-                    <TableCell className="font-medium">{contact.name}</TableCell>
-                    <TableCell>{contact.emailOrPhone}</TableCell>
-                    <TableCell>{contact.source || '-'}</TableCell>
+                {data.items.map((contact: Contact) => (
+                  <TableRow key={contact.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
                     <TableCell>
-                      <Badge
-                        variant={
-                          contact.status === 'Done'
-                            ? 'success'
-                            : contact.status === 'InProgress'
-                            ? 'warning'
-                            : 'info'
-                        }
+                      <div className="text-sm">
+                        <p className="font-semibold text-slate-900 dark:text-white leading-none mb-1">{contact.name}</p>
+                        <div className="flex items-center gap-2 text-xs text-slate-500">
+                          {contact.emailOrPhone.includes('@') ? <Mail className="h-3 w-3" /> : <Phone className="h-3 w-3" />}
+                          {contact.emailOrPhone}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="max-w-[300px]">
+                      <p className="text-sm text-slate-600 dark:text-slate-400 truncate">{contact.message}</p>
+                    </TableCell>
+                    <TableCell>
+                      <Badge 
+                        variant={contact.status === 'Done' ? 'success' : contact.status === 'InProgress' ? 'warning' : 'info'}
+                        className="capitalize"
                       >
                         {contact.status}
                       </Badge>
                     </TableCell>
-                    <TableCell>{formatDate(contact.createdAt)}</TableCell>
                     <TableCell>
-                      <div className="flex items-center justify-end gap-2">
+                      <span className="text-xs font-medium text-slate-500 uppercase tracking-tighter bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
+                        {contact.source || 'WEB'}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-slate-500 text-sm whitespace-nowrap">
+                      {formatDate(contact.createdAt)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-1">
                         <Button
                           variant="ghost"
-                          size="sm"
-                          onClick={() => setSelectedContact(contact)}
+                          size="icon"
+                          className="h-8 w-8 text-slate-400 hover:text-blue-600"
+                          onClick={() => openPanel({ type: 'contacts', mode: 'detail', id: contact.id })}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
-                        {contact.status !== 'Done' && (
-                          <select
-                            value={contact.status}
-                            onChange={(e) =>
-                              updateStatusMutation.mutate({ id: contact.id, status: e.target.value })
-                            }
-                            className="text-xs rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-2 py-1"
-                          >
-                            <option value="New">New</option>
-                            <option value="InProgress">In Progress</option>
-                            <option value="Done">Done</option>
-                          </select>
-                        )}
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -144,51 +148,24 @@ export function ContactsPage() {
             </Table>
           </div>
 
-          {/* Pagination */}
-          {(data.totalPages || Math.ceil(data.total / pageSize)) > 1 && (
-            <div className="mt-4 flex items-center justify-between">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Showing {((page - 1) * pageSize) + 1} to {Math.min(page * pageSize, data.total)} of{' '}
-                {data.total} contacts
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page === 1}
-                  onClick={() => setPage(page - 1)}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page >= (data.totalPages || Math.ceil(data.total / pageSize))}
-                  onClick={() => setPage(page + 1)}
-                >
-                  Next
-                </Button>
-              </div>
+          <div className="flex items-center justify-between px-2">
+            <p className="text-sm text-slate-500">
+              Showing <span className="font-medium text-slate-900 dark:text-white">{(page - 1) * pageSize + 1}</span> to <span className="font-medium text-slate-900 dark:text-white">{Math.min(page * pageSize, data.total)}</span> of <span className="font-medium text-slate-900 dark:text-white">{data.total}</span> inquiries
+            </p>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage(page - 1)}>Previous</Button>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page >= (data.totalPages || 1)}
+                onClick={() => setPage(page + 1)}
+              >
+                Next
+              </Button>
             </div>
-          )}
-        </>
-      )}
-
-      {/* Contact Detail Modal/Drawer - TODO: Implement */}
-      {selectedContact && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-2xl w-full mx-4">
-            <h2 className="text-xl font-bold mb-4">{selectedContact.name}</h2>
-            <p className="mb-2"><strong>Contact:</strong> {selectedContact.emailOrPhone}</p>
-            <p className="mb-2"><strong>Source:</strong> {selectedContact.source || '-'}</p>
-            <p className="mb-2"><strong>Status:</strong> {selectedContact.status}</p>
-            <p className="mb-4"><strong>Message:</strong></p>
-            <p className="mb-4 p-4 bg-slate-100 dark:bg-slate-700 rounded">{selectedContact.message}</p>
-            <Button onClick={() => setSelectedContact(null)}>Close</Button>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
-
