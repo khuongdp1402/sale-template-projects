@@ -7,8 +7,10 @@ import { env } from '../config/env';
  */
 class ApiClient {
   private client: AxiosInstance;
+  private authClient: AxiosInstance;
 
   constructor() {
+    // Admin API client (for /api/v1/admin/* endpoints)
     this.client = axios.create({
       baseURL: env.adminApiBase,
       timeout: env.timeout,
@@ -17,8 +19,24 @@ class ApiClient {
       },
     });
 
+    // Auth API client (for /api/v1/auth/* endpoints)
+    this.authClient = axios.create({
+      baseURL: env.authApiBase,
+      timeout: env.timeout,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Setup interceptors for both clients
+    this.setupInterceptors(this.client);
+    this.setupInterceptors(this.authClient);
+
+  }
+
+  private setupInterceptors(client: AxiosInstance): void {
     // Request interceptor: attach token from localStorage
-    this.client.interceptors.request.use(
+    client.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         const token = localStorage.getItem('admin_token');
         if (token && config.headers) {
@@ -30,7 +48,7 @@ class ApiClient {
     );
 
     // Response interceptor: handle global errors like 401
-    this.client.interceptors.response.use(
+    client.interceptors.response.use(
       (response) => response,
       (error: AxiosError) => {
         if (error.response?.status === 401) {
@@ -49,7 +67,7 @@ class ApiClient {
     }
   }
 
-  // Simplified HTTP methods
+  // Admin API methods (for /api/v1/admin/* endpoints)
   async get<T = any>(url: string, params?: any) {
     const response = await this.client.get<T>(url, { params });
     return response.data;
@@ -67,6 +85,27 @@ class ApiClient {
 
   async delete<T = any>(url: string) {
     const response = await this.client.delete<T>(url);
+    return response.data;
+  }
+
+  // Auth API methods (for /api/v1/auth/* endpoints)
+  async authGet<T = any>(url: string, params?: any) {
+    const response = await this.authClient.get<T>(url, { params });
+    return response.data;
+  }
+
+  async authPost<T = any>(url: string, data?: any) {
+    const response = await this.authClient.post<T>(url, data);
+    return response.data;
+  }
+
+  async authPut<T = any>(url: string, data?: any) {
+    const response = await this.authClient.put<T>(url, data);
+    return response.data;
+  }
+
+  async authDelete<T = any>(url: string) {
+    const response = await this.authClient.delete<T>(url);
     return response.data;
   }
 }

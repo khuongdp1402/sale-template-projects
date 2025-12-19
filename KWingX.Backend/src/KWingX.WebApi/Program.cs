@@ -68,12 +68,32 @@ builder.Services.AddProblemDetails();
 // CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Development", builder =>
+    options.AddPolicy("Development", policy =>
     {
-        builder.WithOrigins("http://localhost:5173", "http://localhost:3000")
-               .AllowAnyMethod()
-               .AllowAnyHeader()
-               .AllowCredentials();
+        policy.WithOrigins(
+                "http://localhost:3000",  // Portal
+                "http://localhost:3001",  // Admin
+                "http://localhost:5173",  // Vite dev server
+                "http://localhost:5174",  // Vite dev server (fallback)
+                "http://127.0.0.1:3000",
+                "http://127.0.0.1:3001",
+                "http://127.0.0.1:5173"
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+    
+    // Production CORS policy (can be configured via environment variables)
+    options.AddPolicy("Production", policy =>
+    {
+        var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+            ?? new[] { "https://kwingx.com", "https://admin.kwingx.com" };
+        
+        policy.WithOrigins(allowedOrigins)
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
     });
 });
 
@@ -208,7 +228,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
-app.UseCors("Development");
+// CORS must be before Authentication/Authorization
+app.UseCors(app.Environment.IsDevelopment() ? "Development" : "Production");
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -43,16 +43,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Real API
+    // Real API - map frontend credentials to backend DTO format
     try {
-      const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
+      const response = await apiClient.authPost<AuthResponse>('/login', {
+        Username: credentials.usernameOrEmail,
+        Password: credentials.password,
+      });
       const { token, user: userData } = response;
       
       localStorage.setItem('admin_token', token);
       localStorage.setItem('admin_user', JSON.stringify(userData));
       setUser(userData);
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Login failed');
+      const errorMessage = error.response?.data?.message 
+        || error.response?.data?.title
+        || error.message
+        || 'Login failed';
+      throw new Error(errorMessage);
     }
   };
 
@@ -66,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (env.isMock) return;
 
     try {
-      const userData = await apiClient.get<User>('/auth/me');
+      const userData = await apiClient.authGet<User>('/me');
       localStorage.setItem('admin_user', JSON.stringify(userData));
       setUser(userData);
     } catch {
