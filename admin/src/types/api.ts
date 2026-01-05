@@ -3,7 +3,7 @@
  * API DTOs should be imported from src/services/contracts.ts
  */
 
-export type { Role, Status } from '../services/contracts';
+export type { Role, Status, UserDto } from '../services/contracts';
 
 export type Severity = 'info' | 'warn' | 'error';
 export type BlogStatus = 'draft' | 'published';
@@ -14,6 +14,42 @@ export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
 export interface LoginCredentials {
   usernameOrEmail: string;
   password: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: UserDto;
+}
+
+export interface LandingSection {
+  id: string;
+  type: string;
+  title: string;
+  content: string;
+  position: number;
+  isVisible: boolean;
+}
+
+export interface Deployment {
+  id: string;
+  environment: string;
+  status: DeployStatus;
+  startedAt: string;
+  completedAt?: string;
+  deployedBy: string;
+}
+
+export interface MonitoringStatus {
+  webhooks: Array<{
+    name: string;
+    status: string;
+    lastCheck: string;
+  }>;
+  jobs: Array<{
+    name: string;
+    status: string;
+    lastRun: string;
+  }>;
 }
 
 export interface ListParams {
@@ -37,5 +73,6 @@ export type {
   ContactDto as Contact,
   SystemLogDto as Log,
   HealthDto as HealthCheck,
-  PagedResult as PagedResponse
+  PagedResult as PagedResponse,
+  Role
 } from '../services/contracts';
