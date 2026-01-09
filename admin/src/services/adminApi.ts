@@ -25,35 +25,35 @@ export const templatesApi = {
     audience?: string;
     status?: string;
   }): Promise<PagedResponse<Template>> => {
-    const response = await apiClient.get('/api/admin/templates', { params });
+    const response = await apiClient.get('templates', { params });
     return response.data;
   },
 
   getById: async (id: string): Promise<Template> => {
-    const response = await apiClient.get(`/api/admin/templates/${id}`);
+    const response = await apiClient.get(`/templates/${id}`);
     return response.data;
   },
 
   create: async (data: Partial<Template>): Promise<Template> => {
-    const response = await apiClient.post('/api/admin/templates', data);
+    const response = await apiClient.post('templates', data);
     return response.data;
   },
 
   update: async (id: string, data: Partial<Template>): Promise<Template> => {
-    const response = await apiClient.put(`/api/admin/templates/${id}`, data);
+    const response = await apiClient.put(`/templates/${id}`, data);
     return response.data;
   },
 
   delete: async (id: string): Promise<void> => {
-    await apiClient.delete(`/api/admin/templates/${id}`);
+    await apiClient.delete(`/templates/${id}`);
   },
 
   publish: async (id: string): Promise<void> => {
-    await apiClient.post(`/api/admin/templates/${id}/publish`);
+    await apiClient.post(`/templates/${id}/publish`);
   },
 
   unpublish: async (id: string): Promise<void> => {
-    await apiClient.post(`/api/admin/templates/${id}/unpublish`);
+    await apiClient.post(`/templates/${id}/unpublish`);
   },
 };
 
@@ -66,66 +66,66 @@ export const blogApi = {
     category?: string;
     status?: string;
   }): Promise<PagedResponse<BlogPost>> => {
-    const response = await apiClient.get('/api/admin/blog/posts', { params });
+    const response = await apiClient.get('blog/posts', { params });
     return response.data;
   },
 
   getById: async (id: string): Promise<BlogPost> => {
-    const response = await apiClient.get(`/api/admin/blog/posts/${id}`);
+    const response = await apiClient.get(`/blog/posts/${id}`);
     return response.data;
   },
 
   create: async (data: Partial<BlogPost>): Promise<BlogPost> => {
-    const response = await apiClient.post('/api/admin/blog/posts', data);
+    const response = await apiClient.post('blog/posts', data);
     return response.data;
   },
 
   update: async (id: string, data: Partial<BlogPost>): Promise<BlogPost> => {
-    const response = await apiClient.put(`/api/admin/blog/posts/${id}`, data);
+    const response = await apiClient.put(`/blog/posts/${id}`, data);
     return response.data;
   },
 
   delete: async (id: string): Promise<void> => {
-    await apiClient.delete(`/api/admin/blog/posts/${id}`);
+    await apiClient.delete(`/blog/posts/${id}`);
   },
 
   publish: async (id: string): Promise<void> => {
-    await apiClient.post(`/api/admin/blog/posts/${id}/publish`);
+    await apiClient.post(`/blog/posts/${id}/publish`);
   },
 
   unpublish: async (id: string): Promise<void> => {
-    await apiClient.post(`/api/admin/blog/posts/${id}/unpublish`);
+    await apiClient.post(`/blog/posts/${id}/unpublish`);
   },
 };
 
 // Landing Sections
 export const landingApi = {
   list: async (): Promise<LandingSection[]> => {
-    const response = await apiClient.get('/api/admin/landing/sections');
+    const response = await apiClient.get('landing/sections');
     return response.data;
   },
 
   getById: async (id: string): Promise<LandingSection> => {
-    const response = await apiClient.get(`/api/admin/landing/sections/${id}`);
+    const response = await apiClient.get(`/landing/sections/${id}`);
     return response.data;
   },
 
   create: async (data: Partial<LandingSection>): Promise<LandingSection> => {
-    const response = await apiClient.post('/api/admin/landing/sections', data);
+    const response = await apiClient.post('landing/sections', data);
     return response.data;
   },
 
   update: async (id: string, data: Partial<LandingSection>): Promise<LandingSection> => {
-    const response = await apiClient.put(`/api/admin/landing/sections/${id}`, data);
+    const response = await apiClient.put(`/landing/sections/${id}`, data);
     return response.data;
   },
 
   delete: async (id: string): Promise<void> => {
-    await apiClient.delete(`/api/admin/landing/sections/${id}`);
+    await apiClient.delete(`/landing/sections/${id}`);
   },
 
   reorder: async (items: Array<{ id: string; position: number }>): Promise<void> => {
-    await apiClient.put('/api/admin/landing/sections/reorder', { items });
+    await apiClient.put('landing/sections/reorder', { items });
   },
 };
 
@@ -138,21 +138,21 @@ export const usersApi = {
     role?: string;
     status?: string;
   }): Promise<PagedResponse<User>> => {
-    const response = await apiClient.get('/api/admin/users', { params });
+    const response = await apiClient.get('users', { params });
     return response.data;
   },
 
   getById: async (id: string): Promise<User> => {
-    const response = await apiClient.get(`/api/admin/users/${id}`);
+    const response = await apiClient.get(`/users/${id}`);
     return response.data;
   },
 
   updateRoles: async (id: string, roles: string[]): Promise<void> => {
-    await apiClient.put(`/api/admin/users/${id}/roles`, { roles });
+    await apiClient.put(`/users/${id}/roles`, { roles });
   },
 
   updateStatus: async (id: string, status: 'Active' | 'Disabled'): Promise<void> => {
-    await apiClient.put(`/api/admin/users/${id}/status`, { status });
+    await apiClient.put(`/users/${id}/status`, { status });
   },
 };
 
@@ -166,17 +166,17 @@ export const ordersApi = {
     dateTo?: string;
     search?: string;
   }): Promise<PagedResponse<Order>> => {
-    const response = await apiClient.get('/api/admin/orders', { params });
+    const response = await apiClient.get('orders', { params });
     return response.data;
   },
 
   getById: async (id: string): Promise<Order> => {
-    const response = await apiClient.get(`/api/admin/orders/${id}`);
+    const response = await apiClient.get(`/orders/${id}`);
     return response.data;
   },
 
   updateStatus: async (id: string, status: string): Promise<void> => {
-    await apiClient.put(`/api/admin/orders/${id}/status`, { status });
+    await apiClient.put(`/orders/${id}/status`, { status });
   },
 };
 
@@ -190,17 +190,17 @@ export const paymentsApi = {
     dateFrom?: string;
     dateTo?: string;
   }): Promise<PagedResponse<Payment>> => {
-    const response = await apiClient.get('/api/admin/payments', { params });
+    const response = await apiClient.get('payments', { params });
     return response.data;
   },
 
   getById: async (id: string): Promise<Payment> => {
-    const response = await apiClient.get(`/api/admin/payments/${id}`);
+    const response = await apiClient.get(`/payments/${id}`);
     return response.data;
   },
 
   getFailures: async (): Promise<Payment[]> => {
-    const response = await apiClient.get('/api/admin/payments/failures');
+    const response = await apiClient.get('payments/failures');
     return response.data;
   },
 };
@@ -213,21 +213,21 @@ export const contactsApi = {
     status?: string;
     search?: string;
   }): Promise<PagedResponse<Contact>> => {
-    const response = await apiClient.get('/api/admin/contacts', { params });
+    const response = await apiClient.get('contacts', { params });
     return response.data;
   },
 
   getById: async (id: string): Promise<Contact> => {
-    const response = await apiClient.get(`/api/admin/contacts/${id}`);
+    const response = await apiClient.get(`/contacts/${id}`);
     return response.data;
   },
 
   updateStatus: async (id: string, status: string): Promise<void> => {
-    await apiClient.put(`/api/admin/contacts/${id}/status`, { status });
+    await apiClient.put(`/contacts/${id}/status`, { status });
   },
 
   updateNotes: async (id: string, notes: string): Promise<void> => {
-    await apiClient.put(`/api/admin/contacts/${id}/notes`, { notes });
+    await apiClient.put(`/contacts/${id}/notes`, { notes });
   },
 };
 
@@ -242,12 +242,12 @@ export const logsApi = {
     dateTo?: string;
     search?: string;
   }): Promise<PagedResponse<Log>> => {
-    const response = await apiClient.get('/api/admin/logs', { params });
+    const response = await apiClient.get('logs', { params });
     return response.data;
   },
 
   getById: async (id: string): Promise<Log> => {
-    const response = await apiClient.get(`/api/admin/logs/${id}`);
+    const response = await apiClient.get(`/logs/${id}`);
     return response.data;
   },
 };
@@ -255,22 +255,22 @@ export const logsApi = {
 // Monitoring
 export const monitoringApi = {
   getHealth: async (): Promise<HealthCheck[]> => {
-    const response = await apiClient.get('/api/admin/monitoring/health');
+    const response = await apiClient.get('monitoring/health');
     return response.data;
   },
 
   getWebhooks: async (): Promise<MonitoringStatus['webhooks']> => {
-    const response = await apiClient.get('/api/admin/monitoring/webhooks');
+    const response = await apiClient.get('monitoring/webhooks');
     return response.data;
   },
 
   getJobs: async (): Promise<MonitoringStatus['jobs']> => {
-    const response = await apiClient.get('/api/admin/monitoring/jobs');
+    const response = await apiClient.get('monitoring/jobs');
     return response.data;
   },
 
   getIncidents: async (): Promise<Log[]> => {
-    const response = await apiClient.get('/api/admin/monitoring/incidents');
+    const response = await apiClient.get('monitoring/incidents');
     return response.data;
   },
 };
@@ -278,22 +278,22 @@ export const monitoringApi = {
 // Deployments
 export const deploymentsApi = {
   list: async (): Promise<Deployment[]> => {
-    const response = await apiClient.get('/api/admin/deployments');
+    const response = await apiClient.get('deployments');
     return response.data;
   },
 
   getById: async (id: string): Promise<Deployment> => {
-    const response = await apiClient.get(`/api/admin/deployments/${id}`);
+    const response = await apiClient.get(`/deployments/${id}`);
     return response.data;
   },
 
   trigger: async (environment: string): Promise<Deployment> => {
-    const response = await apiClient.post('/api/admin/deployments/trigger', { environment });
+    const response = await apiClient.post('deployments/trigger', { environment });
     return response.data;
   },
 
   rollback: async (id: string): Promise<void> => {
-    await apiClient.post(`/api/admin/deployments/${id}/rollback`);
+    await apiClient.post(`/deployments/${id}/rollback`);
   },
 };
 

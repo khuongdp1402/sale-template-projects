@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, LoginCredentials, AuthResponse, Role } from '@/types/api';
+import { User, LoginCredentials, AuthResponse } from '@/types/api';
 import { apiClient } from '@/lib/apiClient';
 import { env } from '@/config/env';
 import { mockServer } from '@/services/mock/mockServer';
@@ -44,10 +44,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     // Real API - map frontend credentials to backend DTO format
+    // Note: .NET API expects camelCase by default
     try {
       const response = await apiClient.authPost<AuthResponse>('/login', {
-        Username: credentials.usernameOrEmail,
-        Password: credentials.password,
+        username: credentials.usernameOrEmail,
+        password: credentials.password,
       });
       const { token, user: userData } = response;
       

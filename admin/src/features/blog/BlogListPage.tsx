@@ -35,7 +35,7 @@ export function BlogListPage() {
       <SEO title="Blog" />
       <PageHeader
         title="Blog Posts"
-        subtitle="Manage articles, updates and ecosystem guides"
+        description="Manage articles, updates and ecosystem guides"
         actions={
           <Button onClick={() => openPanel({ type: 'blog', mode: 'create' })} size="sm">
             <Plus className="h-4 w-4 mr-2" />
@@ -147,7 +147,7 @@ export function BlogListPage() {
                             post.status === 'published' ? 'bg-green-500' : 'bg-slate-400'
                           )}
                         />
-                        {post.status.charAt(0).toUpperCase() + post.status.slice(1)}
+                        {post.status}
                       </Badge>
                     </TableCell>
                     <TableCell>

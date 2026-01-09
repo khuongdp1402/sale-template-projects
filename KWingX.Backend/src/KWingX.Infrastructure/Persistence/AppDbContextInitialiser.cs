@@ -35,7 +35,7 @@ public static class AppDbContextInitialiser
             {
                 Username = "admin",
                 Email = "admin@kwingx.com",
-                PasswordHash = hasher.HashPassword("Admin@12345"),
+                PasswordHash = hasher.HashPassword("admin"),
                 IsActive = true
             };
             context.Users.Add(adminUser);
@@ -49,6 +49,17 @@ public static class AppDbContextInitialiser
                     UserId = adminUser.Id,
                     RoleId = superAdminRole.Id
                 });
+                await context.SaveChangesAsync();
+            }
+        }
+        else
+        {
+            // Update existing admin user password if needed
+            var existingAdmin = await context.Users.FirstOrDefaultAsync(u => u.Username == "admin");
+            if (existingAdmin != null)
+            {
+                // Always ensure admin password is "admin" for development
+                existingAdmin.PasswordHash = hasher.HashPassword("admin");
                 await context.SaveChangesAsync();
             }
         }

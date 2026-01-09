@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/common/EmptyState';
 import { Plus, Edit, ArrowUp, ArrowDown, Layout, Eye } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
-import { cn } from '@/lib/utils';
+// import { cn } from '@/lib/utils';
 
 export function LandingSectionsPage() {
   const { data, isLoading } = useQuery<LandingSection[]>({
@@ -28,7 +28,7 @@ export function LandingSectionsPage() {
       <SEO title="Landing Sections" />
       <PageHeader
         title="Landing Page CMS"
-        subtitle="Manage sections, layout and content of the marketing website"
+        description="Manage sections, layout and content of the marketing website"
         actions={
           <Button variant="default" size="sm">
             <Plus className="h-4 w-4 mr-2" />

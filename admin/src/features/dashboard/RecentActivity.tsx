@@ -1,6 +1,6 @@
 import { useLogsQuery } from '@/hooks/adminHooks';
 import { Card } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
+// import { Badge } from '@/components/ui/Badge';
 import { formatRelativeTime } from '@/lib/format';
 import { Activity, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';

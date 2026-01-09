@@ -3,7 +3,7 @@
  * Built to be gateway-ready and easily switchable between mock/real modes.
  */
 
-const API_MODE = (import.meta.env.VITE_API_MODE || 'mock') as 'mock' | 'real';
+const API_MODE = (import.meta.env.VITE_API_MODE || 'real') as 'mock' | 'real'; // Changed default to 'real'
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 const API_VERSION = import.meta.env.VITE_API_VERSION || 'v1';
 const API_ADMIN_PREFIX = import.meta.env.VITE_API_ADMIN_PREFIX || '/api/{version}/admin';

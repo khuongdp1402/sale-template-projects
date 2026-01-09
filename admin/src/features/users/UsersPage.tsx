@@ -38,7 +38,7 @@ export function UsersPage() {
       <SEO title="Users" />
       <PageHeader 
         title="Users" 
-        subtitle="Manage user accounts, roles and permissions"
+        description="Manage user accounts, roles and permissions"
         actions={
           <Button
             variant="default"

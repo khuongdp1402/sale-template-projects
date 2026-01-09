@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { SEO } from '@/lib/seo';
 import { usePaymentsQuery } from '@/hooks/adminHooks';
-import { Payment } from '@/types/api';
+// import { Payment } from '@/types/api';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -11,7 +11,7 @@ import { formatDate, formatCurrency } from '@/lib/format';
 import { EmptyState } from '@/components/common/EmptyState';
 import { Search, Eye, Filter, CreditCard, ExternalLink, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
-import { cn } from '@/lib/utils';
+// import { cn } from '@/lib/utils';
 
 export function PaymentsPage() {
   const [search, setSearch] = useState('');
@@ -31,7 +31,7 @@ export function PaymentsPage() {
       <SEO title="Payments" />
       <PageHeader 
         title="Payments" 
-        subtitle="Track all financial transactions and payment gateway logs"
+        description="Track all financial transactions and payment gateway logs"
       />
 
       <Card className="p-4 bg-white/50 dark:bg-[#0f172a]/50 backdrop-blur-sm border-slate-200 dark:border-slate-800">

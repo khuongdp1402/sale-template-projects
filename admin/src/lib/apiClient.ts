@@ -68,13 +68,21 @@ class ApiClient {
   }
 
   // Admin API methods (for /api/v1/admin/* endpoints)
-  async get<T = any>(url: string, params?: any) {
-    const response = await this.client.get<T>(url, { params });
+  async get<T = any>(url: string, config?: any) {
+    const response = await this.client.get<T>(url, config);
     return response.data;
   }
 
-  async post<T = any>(url: string, data?: any) {
-    const response = await this.client.post<T>(url, data);
+  async post<T = any>(url: string, data?: any, config?: any) {
+    // If data is FormData, don't set Content-Type (let browser set it with boundary)
+    const headers = data instanceof FormData 
+      ? { ...config?.headers } 
+      : { 'Content-Type': 'application/json', ...config?.headers };
+    
+    const response = await this.client.post<T>(url, data, { 
+      ...config, 
+      headers 
+    });
     return response.data;
   }
 

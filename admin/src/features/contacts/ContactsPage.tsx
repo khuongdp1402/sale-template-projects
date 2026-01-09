@@ -32,7 +32,7 @@ export function ContactsPage() {
       <SEO title="Contacts" />
       <PageHeader 
         title="Contact Requests" 
-        subtitle="Manage customer inquiries and service leads"
+        description="Manage customer inquiries and service leads"
       />
 
       <Card className="p-4 bg-white/50 dark:bg-[#0f172a]/50 backdrop-blur-sm border-slate-200 dark:border-slate-800">

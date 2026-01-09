@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { SEO } from '@/lib/seo';
 import { useOrdersQuery } from '@/hooks/adminHooks';
-import { Order, OrderStatus } from '@/types/api';
+import { OrderStatus } from '@/types/api';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -42,7 +42,7 @@ export function OrdersPage() {
       <SEO title="Orders" />
       <PageHeader 
         title="Orders" 
-        subtitle="Manage customer purchases and transactions"
+        description="Manage customer purchases and transactions"
         actions={
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />

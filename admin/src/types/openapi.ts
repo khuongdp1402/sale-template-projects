@@ -6,12 +6,12 @@
 export interface paths {
   "/users": {
     get: operations["GetUsers"];
-    post: operations["CreateUser"];
+    // post: operations["CreateUser"]; // Not implemented yet
   };
   "/users/{id}": {
-    get: operations["GetUser"];
-    put: operations["UpdateUser"];
-    delete: operations["DeleteUser"];
+    // get: operations["GetUser"]; // Not implemented yet
+    // put: operations["UpdateUser"]; // Not implemented yet
+    // delete: operations["DeleteUser"]; // Not implemented yet
   };
   // ... more paths will be generated here by backend
 }

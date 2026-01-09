@@ -15,11 +15,21 @@ public interface IBlogPostService
     Task<PagedResponse<BlogPostListItemDto>> GetGuidesAsync(int page, int pageSize);
 
     // Admin
-    Task<PagedResponse<BlogPostDto>> GetAdminPostsAsync(int page, int pageSize, string? search = null, string? category = null, BlogPostStatus? status = null);
-    Task<BlogPostDto?> GetPostByIdAsync(Guid id);
-    Task<BlogPostDto> CreatePostAsync(CreateBlogPostRequest request);
-    Task UpdatePostAsync(Guid id, CreateBlogPostRequest request);
+    Task<PagedResponse<BlogPostListItemDto>> GetAdminPostsAsync(int page, int pageSize, string? search = null, BlogPostStatus? status = null);
+    Task<BlogPostResponse?> GetPostByIdAsync(Guid id);
+    Task<BlogPostResponse> CreatePostAsync(BlogPostCreateRequest request, Guid? createdBy = null);
+    Task<BlogPostResponse> UpdatePostAsync(Guid id, BlogPostUpdateRequest request, Guid? modifiedBy = null);
     Task DeletePostAsync(Guid id);
     Task PublishPostAsync(Guid id);
     Task UnpublishPostAsync(Guid id);
+
+    // Legacy methods (for backward compatibility)
+    [Obsolete("Use GetAdminPostsAsync without category parameter")]
+    Task<PagedResponse<BlogPostDto>> GetAdminPostsAsync(int page, int pageSize, string? search = null, string? category = null, BlogPostStatus? status = null);
+    
+    [Obsolete("Use CreatePostAsync with BlogPostCreateRequest")]
+    Task<BlogPostDto> CreatePostAsync(CreateBlogPostRequest request);
+    
+    [Obsolete("Use UpdatePostAsync with BlogPostUpdateRequest")]
+    Task UpdatePostAsync(Guid id, CreateBlogPostRequest request);
 }

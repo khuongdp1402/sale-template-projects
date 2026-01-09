@@ -22,6 +22,7 @@
     <PackageReference Include="Google.Apis.Auth" Version="1.64.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="SSH.NET" Version="2025.1.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.401" />
   </ItemGroup>
 
 </Project>

@@ -3,10 +3,22 @@
  * API DTOs should be imported from src/services/contracts.ts
  */
 
-export type { Role, Status, UserDto } from '../services/contracts';
+import type { 
+  UserDto, 
+  Role, 
+  Status,
+  TemplateListItemDto,
+  BlogPostDto,
+  OrderDto,
+  PaymentDto,
+  ContactDto,
+  SystemLogDto,
+  HealthDto,
+  PagedResult
+} from '../services/contracts';
 
 export type Severity = 'info' | 'warn' | 'error';
-export type BlogStatus = 'draft' | 'published';
+export type BlogStatus = 'Draft' | 'Published';
 export type DeployStatus = 'queued' | 'running' | 'success' | 'failed';
 export type OrderStatus = 'pending' | 'processing' | 'completed' | 'cancelled' | 'refunded';
 export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
@@ -23,11 +35,13 @@ export interface AuthResponse {
 
 export interface LandingSection {
   id: string;
-  type: string;
+  sectionType: string; // Backend uses sectionType
   title: string;
-  content: string;
+  contentJson: any; // Backend uses contentJson
   position: number;
-  isVisible: boolean;
+  isActive: boolean; // Backend uses isActive
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Deployment {
@@ -40,16 +54,26 @@ export interface Deployment {
 }
 
 export interface MonitoringStatus {
-  webhooks: Array<{
-    name: string;
-    status: string;
-    lastCheck: string;
-  }>;
-  jobs: Array<{
-    name: string;
-    status: string;
-    lastRun: string;
-  }>;
+  webhooks: {
+    total: number;
+    active: number;
+    failed: number;
+    items: Array<{
+      name: string;
+      status: string;
+      lastCheck: string;
+    }>;
+  };
+  jobs: {
+    total: number;
+    running: number;
+    failed: number;
+    items: Array<{
+      name: string;
+      status: string;
+      lastRun: string;
+    }>;
+  };
 }
 
 export interface ListParams {
@@ -61,18 +85,16 @@ export interface ListParams {
   filters?: Record<string, any>;
 }
 
-// Re-exporting these for backward compatibility during transition
-// In a real project, we would gradually replace these with DTOs from contracts.ts
-export type { 
-  UserDto as User,
-  UserDto,
-  TemplateListItemDto as Template,
-  BlogPostDto as BlogPost,
-  OrderDto as Order,
-  PaymentDto as Payment,
-  ContactDto as Contact,
-  SystemLogDto as Log,
-  HealthDto as HealthCheck,
-  PagedResult as PagedResponse,
-  Role
-} from '../services/contracts';
+// Re-export for backward compatibility
+export type User = UserDto;
+export type Template = TemplateListItemDto;
+export type BlogPost = BlogPostDto;
+export type Order = OrderDto;
+export type Payment = PaymentDto;
+export type Contact = ContactDto;
+export type Log = SystemLogDto;
+export type HealthCheck = HealthDto;
+export type PagedResponse<T> = PagedResult<T>;
+
+// Re-export enums/types
+export type { Role, Status, UserDto };

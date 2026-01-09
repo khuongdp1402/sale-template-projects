@@ -1,9 +1,10 @@
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using KWingX.Application.Services;
 using KWingX.Application.Interfaces.Services;
-
 using KWingX.Application.Common.Interfaces;
 using KWingX.Application.Common.Models;
+using KWingX.Application.Validators;
 
 namespace KWingX.Application;
 
@@ -13,6 +14,9 @@ public static class DependencyInjection
     {
         // Tenant context
         services.AddScoped<ITenantContext, TenantContext>();
+
+        // Register FluentValidation validators
+        services.AddValidatorsFromAssemblyContaining<BlogPostCreateRequestValidator>();
 
         // Register services
         services.AddScoped<IBlogPostService, BlogPostService>();

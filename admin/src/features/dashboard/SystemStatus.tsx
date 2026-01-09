@@ -20,7 +20,7 @@ export function SystemStatus({ health, monitoring }: SystemStatusProps) {
       <div className="p-4 space-y-4">
         {/* Main Services */}
         <div className="space-y-2">
-          {health.map((check) => (
+          {Array.isArray(health) && health.map((check) => (
             <div key={check.service} className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-[#1e293b]/50 border border-transparent dark:border-slate-800/50">
               <div className="flex items-center gap-3">
                 {check.status === 'healthy' ? (

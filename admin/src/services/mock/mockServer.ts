@@ -2,7 +2,7 @@ import {
   UserDto, TemplateListItemDto, BlogPostDto, OrderDto, PaymentDto, ContactDto, 
   SystemLogDto, HealthDto, PagedResult, Role
 } from '../contracts';
-import { BlogStatus, OrderStatus, PaymentStatus, Severity } from '../../types/api';
+import { Severity } from '../../types/api';
 
 /**
  * In-memory Mock Database
@@ -126,7 +126,7 @@ seed();
  */
 export const mockServer = {
   // Auth
-  login: async (credentials: any) => {
+  login: async (_credentials: any) => {
     return { token: 'mock-jwt-token', user: db.users[0] };
   },
 

@@ -11,7 +11,7 @@ interface ContactsPanelProps {
   onClose: () => void;
 }
 
-export function ContactsPanel({ mode = 'detail', id, onClose }: ContactsPanelProps) {
+export function ContactsPanel({ mode: _mode = 'detail', id, onClose }: ContactsPanelProps) {
   const { data, isLoading } = useContactsQuery({ page: 1, pageSize: 50 });
   const contact: Contact | undefined = id
     ? data?.items.find((c) => c.id === id)

@@ -56,7 +56,7 @@ export function BlogPanel({ mode = 'detail', id, onClose }: BlogPanelProps) {
             </Badge>
           </div>
           <div className="rounded-lg border border-slate-200 dark:border-slate-800 p-3 max-h-64 overflow-y-auto text-sm whitespace-pre-wrap">
-            {post.contentMd}
+            {/* Content preview not available */}
           </div>
         </div>
       )}

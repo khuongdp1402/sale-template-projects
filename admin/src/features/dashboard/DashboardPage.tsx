@@ -52,7 +52,7 @@ export function DashboardPage() {
       <SEO title="Dashboard" />
       <PageHeader 
         title="Admin Overview" 
-        subtitle="Business intelligence and system status dashboard"
+        description="Business intelligence and system status dashboard"
         actions={
           <div className="flex gap-2">
             <Button variant="outline" size="sm">
@@ -109,9 +109,8 @@ export function DashboardPage() {
           <SystemStatus
             health={health || []}
             monitoring={{
-              health: health || [],
-              webhooks: { total: 12, active: 10, failed: 2 },
-              jobs: { total: 5, running: 2, failed: 0 },
+              webhooks: { total: 12, active: 10, failed: 2, items: [] },
+              jobs: { total: 5, running: 2, failed: 0, items: [] },
             }}
           />
         </div>

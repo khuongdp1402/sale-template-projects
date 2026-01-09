@@ -19,7 +19,7 @@ export function TemplatesListPage() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState('');
+  const [categoryFilter] = useState(''); // setCategoryFilter removed - not used yet
   const [typeFilter, setTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const pageSize = 10;
@@ -41,7 +41,7 @@ export function TemplatesListPage() {
       <SEO title="Templates" />
       <PageHeader
         title="Templates"
-        subtitle="Manage your ecosystem templates, themes and starters"
+        description="Manage your ecosystem templates, themes and starters"
         actions={
           <Button onClick={() => openPanel({ type: 'templates', mode: 'create' })} size="sm">
             <Plus className="h-4 w-4 mr-2" />

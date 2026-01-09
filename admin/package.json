@@ -24,7 +24,13 @@
     "react-helmet-async": "^2.0.4",
     "date-fns": "^3.0.6",
     "clsx": "^2.1.0",
-    "tailwind-merge": "^2.2.1"
+    "tailwind-merge": "^2.2.1",
+    "@tiptap/react": "^2.1.13",
+    "@tiptap/starter-kit": "^2.1.13",
+    "@tiptap/extension-image": "^2.1.13",
+    "@tiptap/extension-link": "^2.1.13",
+    "@tiptap/extension-placeholder": "^2.1.13",
+    "react-color": "^2.19.3"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

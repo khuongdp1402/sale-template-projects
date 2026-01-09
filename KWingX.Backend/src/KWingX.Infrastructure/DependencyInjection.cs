@@ -1,11 +1,13 @@
 using KWingX.Application.Common.Interfaces;
 using KWingX.Application.Interfaces;
 using KWingX.Application.Interfaces.Repositories;
+using KWingX.Application.Interfaces.Services;
 using KWingX.Infrastructure.Persistence;
 using KWingX.Infrastructure.Repositories;
 using KWingX.Infrastructure.Services;
 using KWingX.Infrastructure.Identity;
 using KWingX.Infrastructure.Services.Provisioning;
+using KWingX.Infrastructure.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,6 +59,10 @@ public static class DependencyInjection
         services.AddTransient<IKeyGeneratorService, KeyGeneratorService>();
         services.AddScoped<ITenantResolver, TenantResolver>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
+        // File Storage (MinIO/S3)
+        services.Configure<S3Options>(configuration.GetSection(S3Options.SectionName));
+        services.AddScoped<IFileStorage, MinioS3FileStorage>();
 
         services.AddHostedService<DeploymentWorker>();
 

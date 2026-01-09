@@ -1,4 +1,4 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { SEO } from '@/lib/seo';
 import { adminDeployApi } from '@/services/admin';
@@ -11,10 +11,10 @@ import { Play, Eye, Rocket, Server, Activity, ShieldCheck, ExternalLink } from '
 import { EmptyState } from '@/components/common/EmptyState';
 import { Card } from '@/components/ui/Card';
 import { FEATURES } from '@/config/features';
-import { cn } from '@/lib/utils';
+// import { cn } from '@/lib/utils';
 
 export function DeployPage() {
-  const [selectedSite, setSelectedSite] = useState<any | null>(null);
+  // const [selectedSite, setSelectedSite] = useState<any | null>(null);
 
   const { data: sites, isLoading } = useQuery({
     queryKey: ['deploy', 'sites'],
@@ -26,7 +26,7 @@ export function DeployPage() {
       <SEO title="Deployments" />
       <PageHeader
         title="Infrastructure & Deploy"
-        subtitle="Manage cloud instances, customer sites and deployment pipelines"
+        description="Manage cloud instances, customer sites and deployment pipelines"
         actions={
           <Button variant="default" size="sm" disabled={!FEATURES.enableDeployActions}>
             <Rocket className="h-4 w-4 mr-2" />

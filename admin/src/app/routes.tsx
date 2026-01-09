@@ -5,8 +5,9 @@ import { LoginPage } from '@/features/auth/LoginPage';
 import { DashboardPage } from '@/features/dashboard/DashboardPage';
 import { TemplatesListPage } from '@/features/templates/TemplatesListPage';
 import { TemplateEditPage } from '@/features/templates/TemplateEditPage';
-import { BlogListPage } from '@/features/blog/BlogListPage';
+// import { BlogListPage } from '@/features/blog/BlogListPage'; // Replaced by BlogPostsListPage
 import { BlogEditPage } from '@/features/blog/BlogEditPage';
+import { BlogPostsListPage } from '@/features/blog/BlogPostsListPage';
 import { LandingSectionsPage } from '@/features/landing/LandingSectionsPage';
 import { UsersPage } from '@/features/users/UsersPage';
 import { OrdersPage } from '@/features/orders/OrdersPage';
@@ -48,7 +49,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'blog',
-        element: <BlogListPage />,
+        element: <BlogPostsListPage />,
       },
       {
         path: 'blog/new',

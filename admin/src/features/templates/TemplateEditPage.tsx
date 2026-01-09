@@ -49,7 +49,7 @@ export function TemplateEditPage() {
   const { data: template, isLoading } = useQuery<Template>({
     queryKey: ['template', id],
     queryFn: async () => {
-      const response = await apiClient.get(`/api/admin/templates/${id}`);
+      const response = await apiClient.get(`/templates/${id}`);
       return response.data;
     },
     enabled: isEdit,
@@ -90,9 +90,9 @@ export function TemplateEditPage() {
   const mutation = useMutation({
     mutationFn: async (data: TemplateFormData) => {
       if (isEdit) {
-        await apiClient.put(`/api/admin/templates/${id}`, data);
+        await apiClient.put(`/templates/${id}`, data);
       } else {
-        await apiClient.post('/api/admin/templates', data);
+        await apiClient.post('/templates', data);
       }
     },
     onSuccess: () => {

@@ -1,4 +1,5 @@
 using KWingX.Application;
+using KWingX.Application.Interfaces.Services;
 using KWingX.Application.Mapping;
 using KWingX.Application.Options;
 using KWingX.Infrastructure;
@@ -41,7 +42,12 @@ builder.Services.Configure<GoogleOptions>(builder.Configuration.GetSection("Goog
 builder.Services.Configure<PaymentOptions>(builder.Configuration.GetSection("Payments"));
 builder.Services.Configure<TelegramOptions>(builder.Configuration.GetSection("Telegram"));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Allow case-insensitive enum deserialization (frontend sends lowercase, backend expects PascalCase)
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -73,10 +79,12 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(
                 "http://localhost:3000",  // Portal
                 "http://localhost:3001",  // Admin
+                "http://localhost:3002",  // Admin (alternative port)
                 "http://localhost:5173",  // Vite dev server
                 "http://localhost:5174",  // Vite dev server (fallback)
                 "http://127.0.0.1:3000",
                 "http://127.0.0.1:3001",
+                "http://127.0.0.1:3002",
                 "http://127.0.0.1:5173"
             )
             .AllowAnyMethod()
@@ -198,6 +206,19 @@ using (var scope = app.Services.CreateScope())
         await Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.MigrateAsync(context.Database);
 
         logger.LogInformation("Database migration completed successfully.");
+
+        // Ensure MinIO bucket exists
+        try
+        {
+            var fileStorage = services.GetRequiredService<IFileStorage>();
+            await fileStorage.EnsureBucketExistsAsync();
+            logger.LogInformation("MinIO bucket ensured successfully.");
+        }
+        catch (Exception storageEx)
+        {
+            logger.LogWarning(storageEx, "An error occurred while ensuring MinIO bucket. This is non-critical if MinIO is not running.");
+            // Non-critical, continue
+        }
 
         // Seed data
         try 

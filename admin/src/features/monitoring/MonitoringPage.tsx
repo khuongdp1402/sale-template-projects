@@ -5,8 +5,8 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { formatDateTime } from '@/lib/format';
-import { CheckCircle2, XCircle, Activity, Server, Database, Globe, ShieldCheck } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { CheckCircle2, Activity, Server, Database, Globe, ShieldCheck } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 export function MonitoringPage() {
   const { data: health, isLoading } = useHealthQuery();
@@ -16,7 +16,7 @@ export function MonitoringPage() {
       <SEO title="Monitoring" />
       <PageHeader 
         title="System Monitoring" 
-        subtitle="Real-time status of backend services and infrastructure"
+        description="Real-time status of backend services and infrastructure"
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

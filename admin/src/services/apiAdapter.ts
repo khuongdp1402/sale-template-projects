@@ -1,6 +1,6 @@
 import { env } from '../config/env';
 import { apiClient } from '../lib/apiClient';
-import { mockServer } from './mock/mockServer';
+// import { mockServer } from './mock/mockServer';
 
 /**
  * ApiAdapter handles the switch between Mock and Real implementations.

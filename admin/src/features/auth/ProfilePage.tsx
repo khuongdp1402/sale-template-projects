@@ -30,14 +30,7 @@ export function ProfilePage() {
             </label>
             <p className="text-slate-900 dark:text-white">{user.email}</p>
           </div>
-          {user.phone && (
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                Phone
-              </label>
-              <p className="text-slate-900 dark:text-white">{user.phone}</p>
-            </div>
-          )}
+          {/* Phone field not available in UserDto */}
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               Roles
@@ -57,7 +50,7 @@ export function ProfilePage() {
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               Status
             </label>
-            <p className="text-slate-900 dark:text-white capitalize">{user.status}</p>
+            <p className="text-slate-900 dark:text-white capitalize">{user.isActive ? 'Active' : 'Inactive'}</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
